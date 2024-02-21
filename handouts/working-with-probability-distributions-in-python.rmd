@@ -1,0 +1,112 @@
+---
+title: 'Working With Statistical Distributions'
+output:
+    tufte::tufte_handout: default
+    tufte::tufte_html: default
+---
+
+```{python}
+from scipy import stats
+from scipy.stats import norm, binom
+```
+
+```{python, echo=FALSE}
+import numpy as np
+from matplotlib import pyplot as plt
+plt.style.use('grayscale')
+
+x0 = np.linspace(-4, 4)
+y0 = norm.pdf(x0)
+```
+
+## PDF / PMF
+
+Probability our random variable takes on a given value.
+
+```{python, echo=FALSE, fig.margin=TRUE}
+x_b = list(range(11)) # x_binom
+y_b = binom(10, .5).pmf(x_b)
+_ = plt.bar(x_b, y_b, color='white', edgecolor='black', width=1)
+_ = plt.bar(6, binom(10, .5).pmf(6), edgecolor='black', width=1, color='pink')
+_ = plt.xticks(x_b)
+_ = plt.title('Probability Mass Function')
+_ = plt.annotate('P(X = 6) = {:.3}'.format(binom(10, .5).pmf(6)), (6, binom(10, .5).pmf(6)), xytext=(6, .225), arrowprops={'arrowstyle': '->'})
+_ = plt.text(-.5, .22, 'Binomial\nn = 10\np = .5', va='center')
+```
+
+- *pdf*: probability density function, for continuous distributions
+- *pmf*: probability mass function, for discrete distributions
+
+## CDF & PPF
+
+Probability our random variable takes on a value less than or equal to a given
+point.
+
+```{python, echo=FALSE, fig.margin=TRUE}
+x1 = np.linspace(-4, 1)
+y1 = norm.pdf(x1)
+_ = plt.plot(x0, y0, color='black')
+_ = plt.fill_between(x1, y1, color='pink')
+_ = plt.xticks([-3, -2, -1, 0, 1, 2, 3])
+_ = plt.title('CDF/PPF')
+_ = plt.annotate('P(X <= 1) = {:.3}'.format(norm.cdf(1)), (-.25, .15), xytext=(.5, .375), arrowprops={'arrowstyle': '->'})
+_ = plt.text(-4, .35, 'Normal\n$\mu$ = 0\n$\sigma$ = 1', va='center')
+```
+
+- *cdf*: cumulative density function, given a value, what's the probability?
+- *ppf*: percent point function, given a probability, what's the value?
+
+## SF & ISF
+
+Probability our random variable takes on a value greater than a given point.
+
+```{python, echo=FALSE, fig.margin=TRUE}
+x2 = np.linspace(1, 4)
+y2 = norm.pdf(x2)
+
+_ = plt.plot(x0, y0)
+_ = plt.fill_between(x2, y2, color='pink')
+_ = plt.xticks([-3, -2, -1, 0, 1, 2, 3])
+_ = plt.title('SF/ISF')
+_ = plt.annotate('P(X > 1) = {:.3}'.format(norm.sf(1)), (1.5, .05), xytext=(.5, .375), arrowprops={'arrowstyle': '->'})
+_ = plt.text(-4, .35, 'Normal\n$\mu$ = 0\n$\sigma$ = 1', va='center')
+```
+
+- *sf*: survival function, given a value, what's the probability?
+- *isf*: inverse survival function, given a probability, what's the value?
+
+---
+
+Scipy lets us specify parameters for the various distributions and then use the
+functions outlined above[^1].
+
+[^1]:
+    These parameters can also be specified as keyword arguments when the
+    function is invoked, but for the sake of simplicity we will show this way.
+
+- A normal distribution with $\mu = 70, \sigma = 8$
+
+    `my_normal_distribution = norm(70, 8)`
+
+    - What's the likelihook the value is over 80?
+
+        `my_normal_distribution.sf(80)`
+
+    - What value is the cutoff point for the bottom 30%?
+
+        `my_normal_distribution.ppf(.3)`
+
+- A binomial distribution with $n = 10, p = .3$
+
+    `my_binomial_distribution = binom(10, .3)`
+
+    - What's the likelihood of 5 or less successes?
+
+        `my_binomial_distribution.cdf(5)`
+
+    - What's the probability of *exactly* 4 successes?
+
+        `my_binomial_distribution.pmf(4)`
+
+```{marginfigure}
+```

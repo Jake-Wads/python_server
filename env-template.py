@@ -1,0 +1,3 @@
+host = 'SERVER IP ADDRESS'
+user = 'YOUR USERNAME'
+password = 'YOUR PASSWORD'

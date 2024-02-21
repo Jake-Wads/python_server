@@ -1,0 +1,24 @@
+name: Curriculum Build
+on: [workflow_dispatch]
+jobs:
+  Build-The-Curriculum:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Install Prereqs
+        run: sudo apt-get update -y && sudo apt-get -y install build-essential python3-dev python3-venv python3-pip libzmq3-dev
+
+      - name: Install Python Deps
+        run: make setup-deps
+
+      - name: env.py setup
+        run: |
+          echo "${{ secrets.ENV_PY }}" > env.py
+
+      - name: Make Setup
+        run: make setup
+
+      - name: Build Curriculum
+        run: make build

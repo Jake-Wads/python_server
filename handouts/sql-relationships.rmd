@@ -1,0 +1,61 @@
+---
+title: Database Relationships
+output:
+    tufte::tufte_handout: default
+    tufte::tufte_html: default
+---
+
+# Vocab
+
+- **Primary Key**: a column that uniquely identifies a row on a table and is never null
+- **Foreign Key**: a column on a table that references a primary key on another table
+- **Composite Key**: a table that has a primary key that is not a single column, but rather, a combination of multiple columns
+- **`INNER JOIN`**: the default, only rows where there is a match
+- **`LEFT JOIN`**: every row from the lhs, even if there isn't a match in the rhs
+- **`RIGHT JOIN`**: every row from the rhs, even if there isn't a match in the lhs
+
+# Relationship Types
+
+## One To Many
+
+Multiple rows on the many table can relate to the same row on the one table.
+
+```{marginfigure}
+The many table will have a foreign key to the one table.
+```
+
+```sql
+FROM table_a
+JOIN table_b ON table_b.fk = table_a.pk
+```
+
+Example: cars -> manufacturers
+
+```sql
+FROM cars c
+JOIN manufacturers m ON c.manufacturer_id = m.id
+```
+
+## Many To Many
+
+One row on one table can relate to multiple rows on the other table, and
+vice-versa.
+
+```{marginfigure}
+Neither table will contain a foreign key to the other, rather, a **join table**
+(or **link table**) will contain foreign keys to both tables.
+```
+
+```sql
+FROM table_a
+JOIN link_table ON table_a.pk = link_table.a_fk
+JOIN table_b ON link_table.b_fk = table_b.pk
+```
+
+Example: cars <-> owners
+
+```sql
+FROM cars c
+JOIN car_owner co ON c.car_id = co.car_id
+JOIN owners o ON co.owner_id = o.owner_id
+```

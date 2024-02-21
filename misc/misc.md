@@ -1,0 +1,7 @@
+- `jq`
+- The `pprint module`
+- `python -m http.server`
+- `python -m json.tool`
+- flask?
+- pony?
+- namedtuple

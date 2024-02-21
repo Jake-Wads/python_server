@@ -1,0 +1,11 @@
+digraph {
+    node [fontname="menlo" shape=record]
+    rankdir=BT
+
+    presentation [label="{presentations|id\nname\nlocation\ntime}"]
+    atendee [label="{atendees|id\nname}"]
+    atendee_presentation [label="{atendee_presentation|atendee_id\npresentation_id}"]
+
+    atendee_presentation -> {atendee presentation}
+
+}

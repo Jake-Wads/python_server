@@ -1,0 +1,82 @@
+{
+  "statistics-exercises": [
+    "simulation",
+    "probability_distributions",
+    "hypothesis_testing.ipynb"
+  ],
+  "database-exercises": [
+    "mysql_introduction.sql",
+    "tables_exercises.sql",
+    "select_exercises.sql",
+    "where_exercises.sql",
+    "order_by_exercises.sql",
+    "limit_exercises.sql",
+    "functions_exercises.sql",
+    "group_by_exercises.sql",
+    "join_exercises.sql",
+    "subqueries_exercises.sql",
+    "temporary_tables.sql",
+    "more_exercises.sql"
+  ],
+  "python-exercises": [
+    "python_introduction_exercises",
+    "control_structures_exercises.py",
+    "function_exercises.py",
+    "import_exercises.py",
+    "working_with_files.py"
+  ],
+  "numpy-pandas-visualization-exercises": [
+    "matplotlib_exercises",
+    "numpy_exercises",
+    "pandas_series",
+    "dataframes",
+    "advanced_dataframes",
+    "seaborn_exercises"
+  ],
+  "regression-exercises": [
+    "regression/wrangle",
+    "regression/split_scale",
+    "regression/explore",
+    "regression/model.ipynb"
+  ],
+  "classification-exercises": [
+    "classification/acquire",
+    "classification/classification_exercises.ipynb",
+    "classification/prepare",
+    "classification/explore",
+    "classification/model"
+  ],
+  "clustering-exercises": [
+    "clustering/acquire_zillow",
+    "clustering/acquire_mall",
+    "clustering/prepare_mall",
+    "clustering/prepare_zillow",
+    "clustering/explore_tips",
+    "clustering/explore_zillow"
+  ],
+  "time-series-exercises": [
+    "time_series/acquire",
+    "time_series/prepare",
+    "time_series/explore",
+    "time_series/model",
+  ],
+  "anomaly-detection-exercises": [
+    "continuous_probabilistic_methods",
+    "discrete_anomaly_detection",
+    "time_series_anomaly_detection",
+    "clustering_anomaly_detection"
+  ],
+  "natural-language-processing-exercises": [
+    "regex",
+    "acquire",
+    "prepare",
+    "explore",
+    "model"
+  ],
+  "spark-exercises": [
+    "spark101",
+    "wrangle",
+    "explore",
+    "model"
+  ]
+}

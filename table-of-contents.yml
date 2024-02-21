@@ -1,0 +1,233 @@
+nav:
+  - Table of Contents: index.md
+  - Fundamentals:
+    - Environment Setup: fundamentals/environment-setup.md
+    - Data Science: 
+      - Intro to Data Science: fundamentals/intro-to-data-science.md
+      - DS Vocabulary: fundamentals/vocabulary.md
+      - Pipeline: fundamentals/data-science-pipeline.md
+      - Pipeline Demo: fundamentals/pipeline-demo.md
+      - Project: fundamentals/project.md
+    - Command Line:
+      - Introduction: fundamentals/cli/intro.md
+      - Navigating the Filesystem: fundamentals/cli/navigating-the-filesystem.md
+      - Creating and Moving: fundamentals/cli/creating-files-and-directories.md
+      - More Topics: fundamentals/cli/more-topics.md
+    - Git: fundamentals/git.md
+  - Tools:
+    - SQL:
+      - Overview: sql/mysql-overview.md
+      - Introduction: sql/mysql-introduction.md
+      - Database and Tables: sql/databases.md
+      - Basic Statements: sql/basic-statements.md
+      - Clauses:
+        - Where Advanced: sql/where.md
+        - Order By: sql/order-by.md
+        - Limit: sql/limit.md
+      - Functions: sql/functions.md
+      - Group By: sql/group-by.md
+      - Relationships:
+        - Overview: sql/relationships-overview.md
+        - Indexes: sql/indexes.md
+        - Joins: sql/joins.md
+        - Subqueries: sql/subqueries.md
+      - Case Statements: sql/case-statements.md
+      - Temporary Tables: sql/temporary-tables.md
+      - More exercises: sql/more-exercises.md
+    - Python:
+      - Overview: python/overview.md
+      - Introduction: python/introduction-to-python.md
+      - Data Types, Operators, and Variables: python/data-types-and-variables.md
+      - Control Structures: python/control-structures.md
+      - Functions: python/functions.md
+      - Imports: python/imports.md
+    - Data Science Libraries:
+      - Overview: python/ds-libraries-overview.md
+      - numpy: python/intro-to-numpy.md
+      - pandas:
+        - Overview: python/pandas-overview.md
+        - Series: python/series.md
+        - Dataframes: python/dataframes.md
+        - Advanced Dataframes: python/advanced-dataframes.md
+      - matplotlib: python/intro-to-matplotlib.md
+      - seaborn: python/intro-to-seaborn.md
+    - Stats:
+      - Overview: stats/overview.md
+      - Simulation: stats/simulation.md
+      - Probability Distributions: stats/probability-distributions.md
+      - Hypothesis Testing:
+        - Overview: stats/hypothesis-testing-overview.md
+        - Comparison of Groups: stats/compare-group-membership.md
+        - Correlation: stats/correlation.md
+        - Comparison of Means: stats/compare-means.md
+        - More Examples: stats/more-statistical-testing-examples.md
+    - Tableau:
+      - Overview: storytelling/tableau.md
+      - Connecting to Data: storytelling/connecting-to-data.md
+      - Creating Custom Fields: storytelling/creating-custom-fields.md
+      - Creating Charts: storytelling/creating-charts.md
+      - Creating Dashboards: storytelling/creating-dashboards.md
+      - Creating Stories: storytelling/creating-stories.md
+  - Methodologies I:
+    - Classification:
+      - Overview: classification/overview.md
+      - Data Acquisition: classification/acquire.md
+      - Data Preparation: classification/prep.md
+      - Exploratory Analysis: classification/explore.md
+      - Evaluation: classification/evaluation.md
+      - Preprocessing: classification/preprocessing.md
+      - Modeling:
+        - Overview: classification/modeling-overview.md
+        - Decision Tree: classification/decision-trees.md
+        - Random Forest: classification/random-forests.md
+        - KNN: classification/knn.md
+        - Logistic Regression: classification/logistic-regression.md
+      - User-Defined Functions: classification/user-defined-functions.md
+      - Project Part 1 - Report: classification/project.md
+      - Storytelling:
+        - About Storytelling: storytelling/overview.md
+        - Understand What Makes a Good Story: storytelling/understand.md
+        - Creating the Story: storytelling/create.md
+        - Refine & Present: storytelling/refine-present.md
+      - Project Part 2 - Story: storytelling/project_classification_story.md
+    - Regression:
+      - Overview: regression/overview.md
+      - Acquisition and Prep: regression/acquire-and-prep.md
+      - Exploration: regression/explore.md
+      - Scaling Numeric Data: regression/split-and-scale.md
+      - Feature Engineering: regression/feature-engineering.md
+      - Evaluating Regression Models: regression/evaluate.md
+      - Modeling: regression/model.md
+      - Project: regression/project.md
+    - Clustering:
+      - Overview: clustering/overview.md
+      - Data Wrangling: clustering/wrangle.md
+      - Exploratory Analysis: clustering/explore.md
+      - Modeling: clustering/model.md
+      - Using Clusters: clustering/using-clusters.md
+      - Project: clustering/project.md
+    - Time Series:
+      - Overview: timeseries/overview.md
+      - Data Acquisition: timeseries/quick_fix_acquire.md
+      - Working with Time Series Data: timeseries/working-with-time-series-data.md
+      - Data Preparation: timeseries/prep.md
+      - Exploratory Analysis: timeseries/explore.md
+      - Modeling: timeseries/modeling-lesson1.md
+      - Project: timeseries/project.md
+    - Individual Project:
+      - Individual Project Spec: individual-project/individual-project.md
+  - Methodologies II:
+    - Anomaly Detection:
+      - About Anomaly Detection: anomaly-detection/overview.md
+      - Continuous Probabilistic Methods: anomaly-detection/continuous-probabilistic-methods.md
+      - Discrete Probabilistic Methods: anomaly-detection/discrete-probabilistic-methods.md
+      - Detect Timeseries Anomalies: anomaly-detection/time-series-anomaly-detector.md
+      - Detect Through Clustering: anomaly-detection/detecting-with-clustering.md
+    - NLP:
+      - About NLP: nlp/overview.md
+      - Regular Expressions: nlp/regular-expressions.md
+      - Data Acquisition: nlp/acquire.md
+      - Data Preparation: nlp/prepare.md
+      - Data Exploration: nlp/explore.md
+      - Modeling: nlp/model.md
+      - Project: nlp/project.md
+    - Distributed ML:
+      - Overview: distributed-ml/overview.md
+      - Environment Setup: distributed-ml/environment-setup.md
+      - Spark API: distributed-ml/spark-api.md
+      - Data Wrangling: distributed-ml/wrangle.md
+    - Additional Topics:
+      - Spreadsheets:
+        - Overview: spreadsheets/overview.md
+        - Functions: spreadsheets/functions.md
+        - Visualizations: spreadsheets/visualization.md
+      - Tidy Data: classification/tidy-data.md
+      - Cross Validation: advanced-topics/cross-validation.md
+      - Developing Data Products:
+        - Overview: advanced-topics/developing-data-products.md
+        - Virtual Environments: advanced-topics/virtual-environments.md
+        - Building A Model: advanced-topics/building-a-model.md
+        - Flask Intro: advanced-topics/intro-to-flask.md
+        - HTML Templates: advanced-topics/html-templates.md
+        - HTML Forms: advanced-topics/html-forms.md
+        - Styling Webpages: advanced-topics/styling-webpages.md
+        - JSON Responses: advanced-topics/json-responses.md
+      - Deep Learning: advanced-topics/deep-learning.md
+    - Capstones:
+      - Capstones: capstones/capstones.md
+  - Appendix:
+    - Post Work: appendix/postwork.md
+    - Further Reading:
+      - Git:
+        - Local First Repo Setup: appendix/git-local-setup.md
+        - Git Teamwork: appendix/git-teamwork.md
+        - Git Branching: appendix/git-branching.md
+      - SQL:
+        - Database Design: sql/database-design.md
+      - Python:
+        - Sci-Kit Learn: python/intro-to-sklearn.md
+        - Matplotlib Stlyes: python/matplotlib-styles.md
+        - Object Oriented Programming: python/objects.md
+        - Error Handling: python/error-handling.md
+        - Type Annotations: python/type-annotations.md
+        - Custom Sorting Functions: python/custom-sorting-functions.md
+        - Testing Code: appendix/testing-code.md
+        - Handling Duplicate Values: python/handling-duplicate-values.md
+        - Pandas Time Series: python/pandas-time-series.md
+        - Python Checkbook Project: python/project.md
+        - Working With Files: python/working-with-files.md
+      - Storytelling:
+        - Bad Charts: storytelling/bad-charts.md
+      - Stats:
+        - Sampling: stats/sampling.md
+        - Probability: stats/probability-and-event-interactions.md
+        - Distributions and Tests: stats/distributions-and-testing.md
+        - Power Analysis: stats/power-analysis.md
+      - Regression:
+        - Built-in Datasets: regression/built-in-datasets.md
+        - Ridge Regression: regression/ridge-regression.md
+        - Least Angle Regression: regression/least-angle-regression.md
+        - Univariate Regression in Excel: regression/univariate_regression_in_excel.md
+        - Multivariate Regression in Excel: regression/multivariate-regression-in-excel.md
+      - Classification:
+        - SVM: classification/svm.md
+        - Ensemble: classification/ensemble.md
+        - Confusion Matrix: classification/confusion-matrix.md
+      - Clustering:
+        - Review: clustering/review.md
+        - DBSCAN: clustering/dbscan.md
+        - Hierarchical: clustering/hierarchical.md
+      - Time Series Analysis:
+        - Pandas Time Series: timeseries/working-with-time-series-data-with-pandas.md
+        - SVR: timeseries/svr.md
+        - SARIMAX: timeseries/sarimax.md
+      - NLP:
+        - Topic Modeling: nlp/topic-modeling.md
+      - Distributed ML:
+        - Reading From a MySQL Database: distributed-ml/read-jdbc.md
+        - Machine Learning with Spark: distributed-ml/ml-with-spark.md
+    - Professional Development:
+      - Cover Letters: appendix/professional-development/cover-letter-copy.md
+      - Email Setup: appendix/professional-development/email-setup.md
+      - Interview Guidance: appendix/professional-development/interview-guidance.md
+      - Interview Questions-Behavioral: appendix/professional-development/interview-questions-behavioral.md
+      - Interview Questions-Technical: appendix/professional-development/interview-questions-tech.md
+      - Linkedin Tips: appendix/professional-development/linkedin-tips.md
+      - Offer Letters: appendix/professional-development/offer-letters.md
+      - Professionalism 101: appendix/professional-development/professionalism-101.md
+      - T Block Resume: appendix/professional-development/t-block-lesson-ds.md
+      - Tech Talks: appendix/professional-development/tech-talk.md
+      - Vertical Resume: appendix/professional-development/vertical-resume.md
+      - Virtual Meeting Tips and Tricks: appendix/professional-development/virtual-meeting-tips-and-tricks.md
+    - Trello: appendix/trello.md
+    - Documentation and README files: appendix/documentation.md
+    - Data Science Community: appendix/data_science_community.md
+    - Data Viz Resources: appendix/data-viz-references.md
+    - Open Data Sources: appendix/open_data.md
+    - Useful Libraries: appendix/useful_libraries.md
+    - Vocabulary: appendix/vocabulary.md
+    - Questions from the Coding Challenge Meetup:
+      - Overview: appendix/coding-challenges/index.md
+      - Amateur: appendix/coding-challenges/amateur.md
+      - Intermediate: appendix/coding-challenges/intermediate.md
+      - Professional: appendix/coding-challenges/professional.md

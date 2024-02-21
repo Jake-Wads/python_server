@@ -1,0 +1,35 @@
+.dataframe {
+    border: 0;
+    box-shadow: 0;
+}
+
+.dataframe thead {
+    border: 1px solid red;
+    background: grey;
+    color: white;
+}
+
+.dataframe th, .dataframe td {
+    padding: .2em .5em;
+    border: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, .5);
+    border-right: 1px solid rgba(0, 0, 0, .3);
+    border-left: 1px solid rgba(0, 0, 0, .3);
+}
+
+.dataframe tr {
+    border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.dataframe th {
+    font-weight: bold;
+}
+
+.dataframe tr:hover {
+    background: mintcream;
+}
+
+/* nicer seperation between code sample input and output */
+pre { border-left: 10px solid white; }
+.highlight pre { border-left: 10px solid #7cb342; }
+

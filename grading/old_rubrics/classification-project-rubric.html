@@ -1,0 +1,78 @@
+<h1 id="classification-project-rubric">Classification Project
+Rubric</h1>
+<h2 id="csv-file-predicting-churn">5 CSV File Predicting Churn</h2>
+<ul>
+<li>contains the 3 columns specified</li>
+</ul>
+<h2 id="google-slide">10 Google Slide</h2>
+<ul>
+<li>explains how the model works</li>
+<li>metrics on model accuracy are present</li>
+<li>the link to the google slide is in the project
+<code>README</code></li>
+<li>slide is appropriate for the audience and able to be to be consumed
+quickly</li>
+</ul>
+<h2 id="python-script">10 Python Script</h2>
+<ul>
+<li>runs without errors</li>
+<li>how to use it is documented</li>
+<li>the script performs the preparation necessary</li>
+</ul>
+<h2 id="notebook">25 Notebook</h2>
+<h3 id="overall">5 Overall</h3>
+<ul>
+<li>The notebook has a good title</li>
+<li>Documentation (e.g. clear sections, explanations,
+interpretations)</li>
+<li>Code Style (e.g. good function and variable names, consistent
+style)</li>
+</ul>
+<h3 id="acquisition">1 Acquisition</h3>
+<ul>
+<li>The data is acquired from the <code>telco_churn</code> database</li>
+<li>a <code>peekatdata</code> function is present and used to look at
+the recently acquired data</li>
+</ul>
+<h3 id="preparation">4 Preparation</h3>
+<ul>
+<li>the missing values are explored and handled</li>
+<li>the requested columns are created/transformed
+<ul>
+<li><code>churn</code></li>
+<li><code>tenure_year</code></li>
+<li><code>phone_id</code></li>
+<li><code>household_type_id</code></li>
+<li><code>streaming_services</code></li>
+<li><code>online_security_backup</code></li>
+</ul></li>
+<li>the data is split into training and test</li>
+<li>any non-numeric variables that are going to be used are encoded</li>
+<li><code>monthly_charges</code> and <code>total_charges</code> are
+scaled</li>
+</ul>
+<h3 id="exploration">10 Exploration</h3>
+<ul>
+<li>rate of churn vs tenure is visualized</li>
+<li>is there a price threshold for specific services where the
+likelihood of churn increases?</li>
+<li>is churn comparable for month-to-month customers after the 12th
+month and 1-year customers after the 12th month?</li>
+<li>a t-test is performed to compare the monthly charges for cutomers
+who have churned and not churned, controlling for different
+services</li>
+<li>the correlation between monthly charges and internet service type is
+investigated.</li>
+<li>the correlation between monthly charges, internet service, and phone
+service type is investigated.</li>
+<li>the distribution of each feature is visualized</li>
+<li>the relationship between each feature and churn is visualized</li>
+<li>various different types of plots are used</li>
+<li>conclusions are drawn</li>
+</ul>
+<h3 id="modeling">5 Modeling</h3>
+<ul>
+<li>feature selection is performed</li>
+<li>at least 4 different models are fit and evaluated</li>
+<li>the best model is selected and run on the test data set</li>
+</ul>

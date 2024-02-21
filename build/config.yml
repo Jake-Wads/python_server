@@ -1,0 +1,33 @@
+site_name: Codeup Data Science
+
+docs_dir: markdown
+site_dir: site
+
+theme:
+  name: material
+  custom_dir: theme
+  font:
+    text: Open Sans
+    code: IBM Plex Mono
+  logo: img/logo.png
+  palette:
+    primary: light green
+    accent: deep purple
+  feature:
+    tabs: true
+  favicon: img/favicon.ico
+
+# TODO add latex math stuff
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences
+  - footnotes
+  - pymdownx.arithmatex
+  - attr_list
+
+extra_css:
+  - static-assets/dataframes.css
+  - static-assets/custom.css
+extra_javascript:
+  - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
+  - static-assets/fix-table-overflow.js

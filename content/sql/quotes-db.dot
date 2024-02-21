@@ -1,0 +1,12 @@
+digraph {
+    node [fontname="menlo" shape=record]
+    rankdir=BT
+
+    author [label="{authors|id\nfirst_name\nlast_name}"]
+    quote [label="{quotes|id\nauthor_id\ncontent}"]
+    topic [label="{topics|id\nname}"]
+    quote_topic [label="{quote_topic|quote_id\ntopic_id}"]
+
+    quote -> author
+    quote_topic -> {quote topic}
+}

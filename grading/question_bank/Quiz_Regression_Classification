@@ -1,0 +1,104 @@
+terms: 
+
+supervised
+unsupervised
+
+
+which of the following are direct methods for identifying drivers of an outcome? 
+
+rfe
+t-test
+correlation test
+chi-squared test
+data visualization
+confusion matrix
+
+When i fit two different linear regression models, what is the primary difference in the two models that are returned to me? 
+the parameters or coefficients. 
+
+What is the most important hyperparameter to define in the decision tree algorithm? 
+
+I want to build a linear regression model on features X to predict target y. 
+Write a function that builds the model and makes predictions of y (y_hat). 
+The function should return the fitted model as well as predictions. 
+
+Under what conditions would you use linear regression? 
+
+What is the primary difference between regression and a classification? 
+
+Name 3 different evaluation metrics you could use when evaluating classification models. 
+
+Name 3 different regression algorithms. 
+
+Name 3 different classification algorithms. 
+
+Why is logistic regression a regression algorithm?
+Why is logistic regression a classification algorithm? 
+
+it is always necessary to scale data when doing multiple regression. t/f
+
+what is the primary difference between the scalers in group A vs those in group B? 
+(linear vs. non-linear scalers)
+
+given a data set: 
+compute the RMSE for baseline predictions made using the mean. 
+
+put the following actions in the order they should be performed in a data science project. 
+
+do a brain dump of initial thoughts & hypotheses of what could be driving your target variable. 
+plot distributions of individual variables to identify outliers or possible data issues. 
+split into train and test data set. 
+fill missing values of variable B with the mean of variable B
+analyze relationships between variables
+identify baseline performance metric
+fit model A to train data
+fit model B to train data
+evaluate results on train data
+select best model
+evaluate results on test data
+
+
+
+- Below is a sample of a dataset:
+
+    | hours per day | product |
+    |--------------:|:--------|
+    |          3.45 |       A |
+    |          2.63 |       B |
+    |          4.95 |       A |
+    |          1.12 |       C |
+
+    What type of chart would you use to visualize the relationship between `hours per day` and
+    `product`? What statistical test might be appropriate here, given a large enough sample? 
+
+
+- Below is a sample from a dataset.
+
+    |   hours_slept |   coffee_consumed |
+    |--------------:|------------------:|
+    |       5.54104 |           3.24496 |
+    |       7.26644 |           3.02276 |
+    |       6.81273 |           1.60564 |
+    |       8.77158 |           3.48798 |
+    |       6.14643 |           3.18676 |
+
+    How would you visualize the relationship between cups of coffee consumed and
+    hours slept? What is a good statistical test for this relationship?
+   
+In linear regression, the line of ____ _____ is found by minimizing the ______ _______ _______ 
+
+Ordinary linear regression works by finding the line or plane that minimizes the ______ __ _______ ______. 
+That line is often referred to as the line of ____ _____. 
+
+TP: 0
+TN: 8
+FP: 0
+FN: 3
+
+Accuracy = .73
+Sensitivity = 0
+Specificity = 100
+
+[0, 8, 0, 3, 0.73, 0.00, 1.00]
+
+98, 79, 86, 78, 73, 82

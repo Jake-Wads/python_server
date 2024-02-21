@@ -1,0 +1,53 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Why Clustering?\n",
+    "\n",
+    " \n",
+    "1. Reduce noise when exploring.  E.g. You have a massive amount of very noisy data that would be nearly imposible to dive in and start exploring as-is, and you don't know enough to know how to representatively sample your data.  \n",
+    "\n",
+    "1. Feature engineering:  Goal would be to find a new feature (coming from a set of n features) that is either better predictor of the target variable than the n features are when modeled as individual features, or is about equal but will help the model due to the reduction in the number of dimensions. \n",
+    "\n",
+    "1. Use the clusters as a strategy for building an ensemble model, where multiple models are layered on top of each other.  \n",
+    "\n",
+    "1. Use the clusters as a way to dive a bit deeper to other features and the target variable.  Do the clusters differ in their target values?  In their values of other variables? (discovery through viz, t-test, $\\chi_{2}$ test, ...)\n",
+    "\n",
+    "1. Example:  I want to know when someone accesses a directory they would not be expected to access.  How do I know if they would be expected to access it?  Cluster my existing data (training), (recommended: create descriptive labels of those clusters based on what they represent), use a supervised classification model (e.g. KNN) to then predict the cluster for new data. You may want then create a model that will track a users cluster and when you see an unexpected shift, an alert is raised (e.g. Naive Bayes) \n",
+    "\n",
+    "\n",
+    "How it can be used as a feature:\n",
+    "\n",
+    "- Can be used 'as is' in rule based models and many non-regression models, like decision tree. \n",
+    "- Can be converted to a numeric representation of the cluster using the centroid. \n",
+    "- Cluster ids transformed into *$dummy \\space variables^{1}$*\n",
+    "\n",
+    "\n",
+    "$^{1}$*Dummy Variable:  In statistics and econometrics, particularly in regression analysis, a dummy variable (also known as an indicator variable, design variable, one-hot encoding, Boolean indicator, binary variable, or qualitative variable) is one that takes the value 0 or 1 to indicate the absence or presence of some categorical effect that may be expected to shift the outcome. Dummy variables are used as devices to sort data into mutually exclusive categories (such as smoker/non-smoker, etc.) For example, in econometric time series analysis, dummy variables may be used to indicate the occurrence of wars or major strikes. A dummy variable can thus be thought of as a truth value represented as a numerical value 0 or 1 (as is sometimes done in computer programming).* [source](https://en.wikipedia.org/wiki/Dummy_variable_(statistics)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.1"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

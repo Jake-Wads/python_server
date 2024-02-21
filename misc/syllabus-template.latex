@@ -1,0 +1,65 @@
+\documentclass{article}
+
+% left-align title
+\usepackage{titling}
+\pretitle{\begin{flushleft}\Huge\sffamily}
+\posttitle{\end{flushleft}\LARGE}
+\preauthor{\begin{flushleft}}
+\postauthor{\end{flushleft}}
+\predate{\begin{flushleft}}
+\postdate{\end{flushleft}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{booktabs}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{}
+\chead{}
+\rhead{\bfseries Codeup Easley Syllabus}
+\lfoot{}
+\cfoot{}
+\rfoot{\thepage}
+
+$if(numbersections)$
+\setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
+$else$
+\setcounter{secnumdepth}{0}
+$endif$
+
+% sans-serif headers
+\usepackage{sectsty}
+\allsectionsfont{\normalfont\sffamily}
+
+% page margin setup
+\usepackage{marginnote}
+\usepackage{color}
+\renewcommand{\marginfont}{\em\small}
+\reversemarginpar
+\usepackage[
+    inner=3in,
+    outer=1in,
+    marginparwidth=2in,
+    marginparsep=.35in,
+]{geometry}
+
+$if(title)$\title{$title$}$endif$
+$if(author)$\author{$author$}$endif$
+$if(date)$\date{$date$}$endif$
+
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+\begin{document}
+
+$if(title)$\maketitle$endif$
+
+$body$
+
+\end{document}

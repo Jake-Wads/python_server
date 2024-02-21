@@ -1,0 +1,161 @@
+Python Assessment
+=================
+
+Instructions
+------------
+
+0. Carefully read through the instructions and problems before beginning work.
+1. Do your work in a file named ``solutions.py``. It does not matter where this
+   file is on your computer, but keep track of the location so that you can turn
+   it in.
+2. When the time is up, upload your ``solutions.py`` file to Google Classroom.
+
+Grading
+-------
+
+Your assessment will be graded based on the examples given.
+
+One point will be awarded for each problem that is correctly solved.
+
+Each problem includes sample output from an interactive Python session (i.e.
+running the ``python`` command from your terminal). If the examples for each
+problem can be run, and the correct output produced, you will receive credit for
+the problem.
+
+No partial credit will be awarded, and no credit is given if the function is
+misnamed, or if the function does not run (i.e. it produces an error when we try
+to run it).
+
+Problems
+--------
+
+1. Write a function named ``isnegative``. It should accept a number and return a
+   boolean value based on whether the input is negative.
+
+    >>> from solutions import isnegative
+    >>> type(isnegative(0))
+    <class 'bool'>
+    >>> isnegative(4)
+    False
+    >>> isnegative(0)
+    False
+    >>> isnegative(-6)
+    True
+
+2. Write a function named ``count_evens``. It should accept a list and return the
+   number of even numbers in the list.
+
+    >>> from solutions import count_evens
+    >>> type(count_evens([1, 2, 3]))
+    <class 'int'>
+    >>> count_evens([1, 2, 3])
+    1
+    >>> count_evens([4, 6, 8, 10, 12])
+    5
+    >>> count_evens([1, 3, 5, 7, 9])
+    0
+    >>> count_evens([])
+    0
+    >>> count_evens([3, 2])
+    1
+
+3. Write a function named ``increment_odds``. It should accept a list of numbers
+   and return a new list with the odd numbers from the original list
+   incremented.
+
+    >>> from solutions import increment_odds
+    >>> type(increment_odds([1, 2, 3]))
+    <class 'list'>
+    >>> increment_odds([1, 2, 3])
+    [2, 2, 4]
+    >>> increment_odds([2, 2, 1, 4, 5])
+    [2, 2, 2, 4, 6]
+    >>> increment_odds([])
+    []
+    >>> increment_odds([0, 1])
+    [0, 2]
+
+4. Write a function named ``average``. It should accept a list of numbers and
+   return the mean of the numbers.
+
+    >>> from solutions import average
+    >>> type(average([1, 2, 3]))
+    <class 'float'>
+    >>> average([1, 2, 3])
+    2.0
+    >>> average([4, 6, 8, 10, 12])
+    8.0
+    >>> average([1, 2])
+    1.5
+
+5. Create a function named ``name_to_dict``. It should accept a string that is a
+   first name and last name separated by a space, and return a dictionary with
+   ``first_name`` and ``last_name`` keys.
+
+    >>> from solutions import name_to_dict
+    >>> type(name_to_dict('Ada Lovelace'))
+    <class 'dict'>
+    >>> name_to_dict('Ada Lovelace')
+    {'first_name': 'Ada', 'last_name': 'Lovelace'}
+    >>> name_to_dict('Marie Curie')
+    {'first_name': 'Marie', 'last_name': 'Curie'}
+
+6. Write a function named ``capitalize_names``. It should accept a list of
+   dictionaries where each dictionary represents a person and has keys
+   ``first_name`` and ``last_name``. It should return a list of dictionaries
+   with each person's name capitalized.
+
+    >>> from solutions import capitalize_names
+    >>> names = []
+    >>> names.append({'first_name': 'ada', 'last_name': 'lovelace'})
+    >>> names.append({'first_name': 'marie', 'last_name': 'curie'})
+    >>> names
+    [{'first_name': 'ada', 'last_name': 'lovelace'}, {'first_name': 'marie', 'last_name': 'curie'}]
+    >>> type(names)
+    <class 'list'>
+    >>> capitalize_names(names)
+    [{'first_name': 'Ada', 'last_name': 'Lovelace'}, {'first_name': 'Marie', 'last_name': 'Curie'}]
+    >>> type(capitalize_names(names))
+    <class 'list'>
+
+7. Write a function named ``count_vowels``. It should accept a word and return a
+   number that is the number of vowels in the given word. "y" should not count
+   as a vowel.
+
+    >>> from solutions import count_vowels
+    >>> type(count_vowels('codeup'))
+    <class 'int'>
+    >>> count_vowels('codeup')
+    3
+    >>> count_vowels('abcde')
+    2
+    >>> count_vowels('why')
+    0
+
+8. Write a function named ``analyze_word``. It should accept a string that is a
+   word and return a dictionary with information about the word: the total
+   number of characters in the word, the original word, and the number of vowels
+   in the word.
+
+    >>> from solutions import analyze_word
+    >>> type(analyze_word('codeup'))
+    <class 'dict'>
+    >>> analyze_word('codeup')
+    {'word': 'codeup', 'n_letters': 6, 'n_vowels': 3}
+    >>> analyze_word('abcde')
+    {'word': 'abcde', 'n_letters': 5, 'n_vowels': 2}
+    >>> analyze_word('why')
+    {'word': 'why', 'n_letters': 3, 'n_vowels': 0}
+
+Hints
+-----
+
+- When a problem says ``return``, it means ``return``, not ``print``.
+- When a problem says that a function will take in an input, then it means the
+  function must be defined so that it takes in an argument as its input, rather
+  than relying on variables defined outside the function.
+- Points will only be awarded for a complete, correct function. This means it is
+  better to have one completed function, rather than 8 half-finished ones.
+- Run your code frequently to check for syntax errors.
+- You can check to see if a problem is correct by running ``python`` on your
+  command line and testing the examples given.

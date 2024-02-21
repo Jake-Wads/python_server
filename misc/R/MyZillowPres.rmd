@@ -1,0 +1,1233 @@
+---
+title: "PREDICTING ERROR IN ZESTIMATES"
+author: "Maggie Giust"
+date: "10/15/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message=FALSE, cache = TRUE)
+```
+
+### Project Preparation
+**GOALS** Summary, Goals, Questions & hypotheses documented, execution plan outlined
+
+#### Zillow's Home Value Prediction, aka Zestimate
+
+**From Zillow:** "The Zestimate was created to give consumers as much information as possible about homes and the housing market, marking the first time consumers had access to this type of home value information at no cost....'Zestimates' are estimated home values based on 7.5 million statistical and machine learning models that analyze hundreds of data points on each property. And, by continually improving the median margin of error (from 14% at the onset to 5% today), Zillow has since become established as one of the largest, most trusted marketplaces for real estate information in the U.S. and a leading example of impactful machine learning....In the qualifying round, you’ll be building a model to improve the Zestimate residual error. In the final round, you’ll build a home valuation algorithm from the ground up, using external data sources to help engineer new features that give your model an edge over the competition."
+
+#### Goals
+Our goal in this 1st round (beyond advancing to the 2nd round), is to best predict, given the data provided & time available, the difference between the Zestimate and the Sales Price, i.e. the error.  We want to predict how on or how off the Zestimate actually is. (Technically, we will predicting the logerror, so if the error = Zestimate - SalePrice, the logerror=log(Zestimate)-log(SalePrice)).   We will submit our predictions for each property ID for October, November & December for 2016 and 2017 (i.e. 6 different time periods).  We will evaluate performance of our predictions using Mean Absolute Error.  
+
+#### Questions
+Can the existing Zestimates be improved?  How can we know for sure?  If we can predict errors of the existing predictions, then we know there is a pattern to the errors, and, if there is a pattern to the errors, then there is something the existing model isn't capitalizing on, and, if there is something not be used, then we can use it to make the model better!
+If you think about regression modeling...you know you don't have an optimal model when you can see a pattern in the plotting of the residuals.  
+
+____________________________________________________
+
+### A. Data Engineering
+**GOAL** Refine data to be useful in modeling
+1. Data Acquisition
+2. Data Preparation
+3. Data Represenationa & Exploration
+
+#### 1. Data Acquisition
+**GOAL** Acquire data needed to achieve goals and document the metadata, i.e. the data aobut the data. 
+
+- Sources could be SQL, a website through HTML or API, flat file (like csv or excel), big data store (like hadoop, AWS-S3), NoSQL database, image files or audio/video files  
+- Also known as: Data gathering, data import  
+
+#### 2. Data Preparation
+**GOAL** Get the data all in one place and in a workable format
+- Putting the data in a structure, like a data frame, that can be used for preliminary analysis.
+- Ideally, each column should be a variable, each row an observation.
+- Outliers may need to be removed here, data normalized, and missing values addressed.
+- Also known as: Tidying the data, data cleansing
+
+#### 3. Data Representation & Data Exploration
+
+**GOAL** Understand the signals in the data, their strength, the features that drive the outcome, and other features to construct, and transform variables into features
+- Convert data to the most optimal data types for storing and modeling 
+- Narrow in on observations of interest
+- Creating new variables that are functions of existing variables
+- Also known as: Exploratory Visualization, Exploratory Analysis, Data Transformation
+
+____________________________________________________
+
+
+### B. Data Modeling
+**GOAL** Turn the data prepared in the engineering phase into a prediction or valuable insight.
+1. Data Discovery
+2. Data Modeling
+
+#### 1. Data Discovery
+**GOAL** Walk away with features that you now know drive the behavior of the data you are targeting  
+- Find patterns and potential insights in the data
+- Define how the features can be used to build a model
+- Identify the signals in the dataset that are of greater value
+- Identify interdependence or correlation among variables
+- Create synthetic features
+- Filter out redundant variables and extract the most valuable.
+- Also known as: Feature Engineering
+
+#### 2. Data Learning
+**GOAL** Create a robust & generalizable model that is a mapping between features (inputs/independent variables) and a target variable (output/dependent variable) based on discoveries and transformations made in previous steps.
+- Select meta-parameters
+- Sampling the data (training/testing)
+- Train the model
+- Selecting algorithms
+- Evaluating results
+- Test the model 
+
+____________________________________________________
+
+
+### C. Information Distillation
+**GOAL**  Summarize the previous stages and making it available to you customers/end users
+1. Insight, delivery, visualization
+2. Data product creation
+
+#### 1. Insight, Delivery, Visualization
+**GOAL** Deliver the work in a consumable way to the stakeholders of the project so that the goals can be met.  
+- Summarize insights into actionable items
+- Advocate for your findings and recommendations through visualizations
+- Deliver the model, the report and/or other data product to the stakeholders.
+- This is the most critical step in order to make use of all the work done to this point. 
+
+#### 2. Data Product Creation
+**GOAL** Enable a machine learning model to be consumed through an interface by an end user  
+- This is about deploying a model to production, or productionizing the model, so that it is live and consumable in the desired manner
+- This is usually done through an API
+- The web application will take data input by the user, and the model will take that data, extract/compute the features, feed them to the model which will generate results.  
+- These results will then be fed back to the web application for it to respond accordingly, such as display a particular product for the end user. 
+
+
+____________________________________________________
+____________________________________________________
+
+### A. Data Engineering
+**GOAL** Refine data to be useful in modeling
+1. Data Acquisition
+2. Data Preparation
+3. Data Represenationa & Exploration
+
+____________________________________________________
+
+#### 1. Data Acquisition
+**GOAL** Acquire data needed to achieve goals and document the metadata, i.e. the data aobut the data. 
+
+- Sources could be SQL, a website through HTML or API, flat file (like csv or excel), big data store (like hadoop, AWS-S3), NoSQL database, image files or audio/video files  
+- Also known as: Data gathering, data import  
+
+##### a. Metadata: data about the datasets
+
+We are provided with a list of about 2.9 million real estate properties in three counties (Los Angeles, Orange and Ventura, California).  
+There are 4 files:  
+  1. properties_2016.csv contains information about the properties themselves.  This is where we will find our potential "features" or "independent variables".  
+  2. train_2016_v2.csv containing information about the transcations, specifically the logerror and the transaction date.  This is where we will find our "dependent variable" or "target".  
+  3. sample_submission.csv which is what we will populate with our predictions.   
+Let's read the data into R and see what it looks like.
+  4. zillow_data_dictionary which is a workbook with a spreadsheet containing a list of the fields, and other spreadsheets containing mapping from IDs to names/descriptioins.
+
+##### b. Acquire
+  
+Load the data into R for analysis 
+
+1. Sample of data 
+
+```{r IMPORT_part1, warning=FALSE, message=FALSE}
+library(tidyverse)
+sample <- read_csv("~/properties_2016.csv", n_max=200000)
+spec(sample)
+```
+
+2. All data  
+
+```{r importData, warning=FALSE, message=FALSE}
+library(tidyverse)
+mycolnames <- c("parcelid","typeAC","typeArchitecture","sqftBasement","numBath","numBed","typeBuildingFrame","rankBuildingCondition","numBath1","typeDeck","sqftFinishedFirstFloor","sqftFinishedAll","sqftFinishedAll1","sqftFinishedPerim","sqftFinishedAll2","sqftFinishedFirstFloor1","sqftAll","codeFIPS","numFireplace","numBathFull","numGarage","sqftGarage","boolHottub","typeHeating","locLatitude","locLongitude","sqftLot","numPool","sqftPool","boolHottub1","boolPoolHottub","boolPoolNoHottub","typePropertyUseCounty","typePropertyUseID","typePropertyUseDesc","locCensusTractBlockRaw","locCity","locCounty","locNeighborhood","locZip","numRoom","typeStory","numBath3Q","typeConstruction","numUnits","typePatio","typeShed","yearBuilt","numStories","boolFireplace","valueAssessedStructure","valueAssessedAll","yearTax","valueAssessedLand","valueTax","boolTaxPastDue","yearTaxPastDue","locCensusTractBlock")
+```
+
+```{r read_all_data}
+prop <- read_csv("~/properties_2016.csv", col_names = mycolnames, skip=1)
+# prop17 <- read_csv("properties_2017.csv", col_names = mycolnames, skip=1)
+tr <- read_csv("~/train_2016_v2.csv")
+# tr17 <- read_csv("train_2017.csv")
+
+```
+    
+____________________________________________________
+
+##### 2. Data Preparation
+**GOAL** Get the data all in one place and in a workable format
+- Putting the data in a structure, like a data frame, that can be used for preliminary analysis.
+- Ideally, each column should be a variable, each row an observation.
+- Address outliers
+- Normalized data
+- Address missing values
+- Remove any duplicates (dedup)
+- Also known as: Tidying the data, data cleansing
+
+##### a. Remove Duplicates
+
+**1. Identify dups**  
+
+```{r dups_fcn}
+numDups <- function(df) {
+  require(dplyr)
+  count.vals <- summarise(group_by(df, parcelid),n=n())
+  count.dups <- nrow(count.vals[count.vals$n>1,])
+  return(count.dups)
+}
+
+dups.prop <- numDups(prop)
+dups.tr <- numDups(tr)
+```
+   
+1. Dups in 2016 property data? `r dups.prop16`    
+2. Dups in 2016 training data? `r dups.tr16`   
+   
+**2. Handle Duplicates**  
+
+Due to duplicates in 2016 and 2017 training data, I will take the record with the latest transaction date.   
+   
+```{r dedup}
+uniq.tr <- summarise(group_by(tr, parcelid), transactiondate=max(transactiondate))
+```
+
+- header: independent variables
+
+```{r head_prop}
+print(head(prop))
+```
+
+- header: dependent/target variable
+
+```{r tr_head}
+print(head(tr))
+```
+
+- summary stats: independent variables
+
+```{r summary_prop}
+print(summary(prop))
+```
+   
+- summary stats: dependent variables
+
+```{r tr_summary}
+print(summary(tr))
+```
+     
+
+##### b. Organize into ideal data structure
+
+Tidy the data:  ensure each row is an observation and each column is a feature  
+*See functions of gather(), spread(), separate() and unite() for data tidying*
+
+Join data sets: 2016 with 2017 and property details with labels    
+**prop** is the data frame on which the final model will be run.      
+**tr.prop** is the data frame on which the model will be trained.     
+**tr** is the data frame with the labels only, i.e. no features/property details.    
+  
+```{r organizeData, warning=FALSE, message=FALSE}
+prop = inner_join(prop, tr, by=c("parcelid"))
+```
+   
+##### a. Null Values & Cleaning
+
+I see that 11,437 do not have values for latitude, longitude and other fields, so I look at those and see if there are any values in other columns. 
+
+```{r tidy_part1b}
+summary(prop[is.na(prop$locLatitude),])
+```
+
+As I suspected, the only value is the parcelId.  I will filter these out for now.  
+
+```{r tidy_part1c}
+naprops <- prop[is.na(prop$locLatitude),]
+myprops <- prop[!is.na(prop$locLatitude),]
+remove(prop)
+```
+
+I will also separate the properties that are land only from those with residential property, as that will affect how I handle NA's.  First, I look at propertyType data frame see property types of 290 and 291 are land only.  Next, I need to identify which field holds these id's in the myprops data frame.  I see that typePropertyUseID is related to these IDs and that typePropertyUseCounty and typePropertyUseDesc are related (1 has ID, other has description)  
+
+```{r tidy_part1d}
+# table(myprops$typePropertyUseDesc); table(myprops$typePropertyUseCounty); table(myprops$typePropertyUseID)
+nrow(myprops[myprops$typePropertyUseID==290 | myprops$typePropertyUseID==291,])
+nrow(myprops[is.na(myprops$typePropertyUseID),])
+```
+
+In looking at this table, I see that there are 0 properties listed as land only and there are 0 properties where typePropertyUseID is null. So either all of these properties have structures on them or there is an error in the labeling of typePropertyUseID.  Knowing that, we will figure out what to do with nulls. 
+
+```{r tidy_part1e, warning=FALSE, message=FALSE}
+for (i in 1:ncol(myprops)) {
+  print(colnames(myprops[i]))
+  print(head(sort(table(myprops[i]),decreasing = TRUE)))
+}
+```
+
+**DeckPatio:** typeDeck & typePatio are low counts, so merge these to boolDeckPatio, NA="false" and other = "true"
+**Pool:** numPool, boolPoolHottub & boolPoolNoHottub only include 1 value, so merge these fields along with sqftPool to boolPool, where NA="false" and all others = "true"
+**Hottub:** boolHottub, boolHottub1, boolPoolHottub only include 1 value, so I will change this where NA="false" and all others = "true"
+**TaxPastDue:** boolTaxPastDue & yearTaxPastDue - merge these where NA in both is "false", others are "true"
+**Fireplace:** boolFireplace & numFireplace - merge these where NA in both is "false", others are "true"
+locCensusTractBlock & locCensusTractBlockRaw I will remove for now.
+numGarage & sqftGarage:  I will use numGarage instead of sqftGarage, as these are highly correlated.  I will group with 0, 1, 2, 3+
+**yearTax:** for all < 2015, i will change to "pre-2015", all others will be "2015"
+**numBath:** use numBath and remove numBathFull, numBath1, numBath3Q
+**numUnits:** if NA, fill with 1
+
+```{r tidy_part1f, warning=FALSE, message=FALSE}
+myprops <- myprops %>% 
+  mutate(
+    boolDeckPatioShed = parse_integer(ifelse(is.na(typeDeck) & is.na(typePatio) & is.na(typeShed), 0, 1)),
+    boolPool = parse_integer(ifelse(is.na(numPool) & is.na(boolPoolHottub) & is.na(boolPoolNoHottub) & is.na(sqftPool), 0, 1)),
+    boolHottub = parse_integer(ifelse(is.na(boolHottub) & is.na(boolHottub1) & is.na(boolPoolHottub), 0, 1)),
+    boolTaxPastDue = parse_integer(ifelse(is.na(boolTaxPastDue) & is.na(yearTaxPastDue),0,1)),
+    boolFireplace = parse_integer(ifelse(is.na(boolFireplace) & is.na(numFireplace),0,1)),
+    yearTax = parse_integer(ifelse(yearTax==2015 | is.na(yearTax), 2015, 2014)),
+    numGarage = parse_integer(ifelse((is.na(numGarage)|numGarage==0) & (is.na(sqftGarage)|sqftGarage==0),0,
+           ifelse(numGarage>=3,3,numGarage)))) %>%
+  select(-typeDeck, -typePatio, -typeShed, -numPool, -boolPoolHottub, -boolPoolNoHottub, -sqftPool, 
+         -boolHottub1, -yearTaxPastDue, -numFireplace, -sqftGarage, -locCensusTractBlock, -locCensusTractBlockRaw, 
+         -numBathFull, -numBath1, -numBath3Q, -sqftFinishedAll1, -sqftFinishedAll2, -sqftBasement,
+         -sqftFinishedFirstFloor, -sqftFinishedPerim, -sqftFinishedFirstFloor1, -typeStory, -typeAC, -typeBuildingFrame,
+         -sqftAll, -typeHeating, -typeArchitecture, -typeConstruction, -typeStory, -numStories, -numRoom, -locCensusTractBlock)
+summary(myprops)
+```
+
+**Home Details**
+Because numBed has fewest null values, I will sort by numBed and then fill numBath, numRoom, numStories, numUnits and sqftFinishedAll based on those.
+
+```{r}
+summary(select(myprops,starts_with("num")))
+```
+
+```{r}
+summary(select(myprops,starts_with("sqft")))
+```
+
+**Location**
+Sort locZip to fill with year built
+for locNeighborhood, are the non-nulls spread across too many neighborhoods?
+
+```{r}
+summary(select(myprops,starts_with("loc")))
+# table(myprops$locNeighborhood)  
+# Yes! 
+```
+
+**Type**
+
+```{r}
+types = select(myprops,starts_with("type"))
+for (i in 1:ncol(types)) {
+  print(colnames(types[i]))
+  print(head(sort(table(types[i]),decreasing = TRUE)))
+}
+
+```
+____________________________________________________
+
+#### 3. Data Representation & Data Exploration
+
+**GOAL** Understand the signals in the data, their strength, the features that drive the outcome, and other features to construct, and transform variables into features
+- Convert data to the most optimal data types for storing and modeling 
+- Narrow in on observations of interest
+- Creating new variables that are functions of existing variables
+- Also known as: Exploratory Visualization, Exploratory Analysis, Data Transformation
+
+#### 3.1 Data Representation  
+
+##### a. Convert data types that we are aware need to be changed
+   
+Convert variables with character data type to factor data type    
+
+    
+```{r char}
+prop <- myprops %>% mutate(codeFIPS = as.factor(codeFIPS),
+                        typePropertyUseCounty = as.factor(typePropertyUseCounty),
+                        typePropertyUseDesc = as.factor(typePropertyUseDesc),
+                        typePropertyUseID = as.factor(typePropertyUseID))
+```
+##### b. Remove variables     
+  
+Zero or near-zero variance:     
+- yearTax    
+
+```{r rm_vars}
+rmcols <- c("yearTax")  
+prop <- select(prop, -one_of(rmcols))
+
+```
+    
+##### c. Normalize boolean variables:     
+
+- fill missing values with 0     
+- boolFireplace, boolHottub, boolTaxPastDue: convert 'true'/'Y' to 1 & type to number.    
+- boolPoolHottub, boolPoolNoHottub: Merge into "has Pool"    
+- boolHottub, boolHottub1, boolPoolHottub: Merge into "has Hot Tub"    
+- convert to factor.  
+      
+      
+```{r takeaways_bool}
+prop <- prop %>% mutate(hasFireplace = as.factor(boolFireplace),
+                        hasTaxPastDue = as.factor(boolTaxPastDue),
+                        hasHottub = as.factor(boolHottub),
+                        hasPool = as.factor(boolPool),
+                        hasDeckPatioShed = as.factor(boolDeckPatioShed)) %>%
+  select(-starts_with("bool"))
+
+```
+   
+   
+##### d. Variables where missing indicates 0      
+   
+    
+numGarage
+  
+- fill missing values with 0    
+- all non-zero values become 1    
+- convert to factor    
+    
+    
+```{r takeaways_fill0}
+prop <- prop %>% mutate(numGarage = ifelse(is.na(numGarage),0,numGarage))
+```
+    
+```{r}
+
+summary(prop)
+```   
+##### e. Other missing values    
+      
+- numUnits -> 1    
+- rankBuildingCondition -> 6     
+- typePropertyUseID -> 261      
+- typePropertyUseCounty -> 0100       
+- typePropertyUseDesc -> LAR1     
+- locNeighborhood -> convert to 0 if no value, 1 if value   
+    
+```{r otherNULL}
+prop <- prop %>% mutate(numUnits = ifelse(is.na(numUnits), 1, numUnits),
+                        rankBuildingCondition = ifelse(is.na(rankBuildingCondition), 
+                                                       6, rankBuildingCondition),
+                        typePropertyUseCounty = as.character(typePropertyUseCounty),
+                        typePropertyUseDesc = as.character(typePropertyUseDesc),
+                        typePropertyUseID = as.character(typePropertyUseID)) %>%
+  mutate(typePropertyUseCounty = ifelse(is.na(typePropertyUseCounty), "0100",
+                                        typePropertyUseCounty),
+         typePropertyUseDesc = ifelse(is.na(typePropertyUseDesc), "LAR1", typePropertyUseDesc),
+         typePropertyUseID = ifelse(is.na(typePropertyUseID), "261", typePropertyUseID),
+         hasNeighborhood = ifelse(is.na(locNeighborhood), 0, 1)) %>%
+  mutate(typePropertyUseCounty = as.factor(typePropertyUseCounty),
+         typePropertyUseDesc = as.factor(typePropertyUseDesc),
+         typePropertyUseID = as.factor(typePropertyUseID)) %>%
+  select(-locNeighborhood)
+```
+   
+       
+**rankBuildingCondition**    
+      
+group into a smaller spread      
+     
+```{r units}
+prop <- prop %>% mutate(rankBuildingCondition = 
+                          ifelse(rankBuildingCondition < 4, 1,
+                                 ifelse(rankBuildingCondition < 7, 2,
+                                        ifelse(rankBuildingCondition < 10, 3, 4))))
+```
+   
+
+**City & Zip**       
+     
+     
+- locZip:  odd max value of 399675 looks like a data quality issue       
+     
+     
+```{r zip1}
+summary(prop$locZip)
+```
+    
+      
+**Find cities where zip is 399675**    
+    
+```{r zip2}
+cities <- unique(prop[prop$locZip==399675,]$locCity)
+cities <- cities[!is.na(cities)]
+cityzip <- select(prop[prop$locCity %in% cities,],locZip,locCity)
+table(cityzip$locZip, cityzip$locCity)
+```
+    
+    
+**Replace with expected zip for that city**      
+    
+    
+  
+```{r zip3}
+prop <- prop %>% mutate(locZip = 
+                          ifelse(locZip==399675 & locCity==24435, 96270,
+                                 ifelse(locZip==399675, 96273,
+                                        locZip)))
+  
+```
+
+     
+       
+**Year Built**      
+       
+     
+- convert yearBuilt into age of the property, grouping by 10 years     
+     
+      
+```{r age}
+prop <- prop %>% mutate(age = round((2018-yearBuilt)/10,0))
+# take a peek
+table(prop$age)
+# bin 11+ into 1 bucket
+prop <- prop %>% mutate(age = ifelse(age>=11, 11, age))
+```
+   
+    
+         
+**Impute Median Values**      
+    
+      
+- numBed, numBath   
+- locLatitude, locLongitude, locCounty     
+- sqftFinishedAll, sqftLot     
+- valueAssessedStructure, valueAssessedAll, valueAssessedLand, valueTax     
+
+   
+#### 3.2 Data Exploration  
+   
+##### a. Target Variable: What are we predicting?        
+  
+LOGERROR of Zestimate       
+     
+```{r identify_target, fig.height=3, fig.width=5, warning=FALSE}
+target <- prop$logerror 
+ggplot(data=prop, aes(x=target)) +
+   geom_histogram(binwidth = .1) + 
+   scale_y_log10()
+```
+   
+**Bed, Bath, Size**     
+      
+   
+Do number of bedrooms (numBed), number of baths (numBath), and square feet (sqftFinishedAll) depend on each other? If so, I will want to either select one to use or find a way to merge these 3 variables into a single variable/feature.      
+   
+           
+```{r bedbath, warning=FALSE}
+ggplot(prop, aes(x=numBed, y=numBath)) + 
+  geom_jitter(alpha=1/100)
+```
+
+   
+```{r bedsqft, warning=FALSE}
+ggplot(prop, aes(x=numBed, y=sqftFinishedAll)) + 
+  geom_jitter(alpha=1/100)
+```
+
+   
+```{r cod, warning=FALSE}
+house.lm <- lm(sqftFinishedAll ~ numBed + numBath, 
+               data=prop[prop$numBed>0 & prop$numBath>0,])
+cod <- summary(house.lm)$r.squared
+
+print(cod)
+```
+       
+       
+There is a correlation of `r print(cod)`     
+   
+      
+##### b. Extremes in LogError  
+    
+My hypothesis is that by finding those attributes that differ the most across the group with the largest error and that with the smalles, I will be closer to identifying the biggest drivers in the error (logerror).       
+I use the absolute logerror in order to take the "bottom 10%" indicating those with minimal error.      
+I then take the lower 5% (of true logerror) and upper 5% of true logerror.       
+   
+  
+```{r top10, echo=FALSE}
+prop <- prop %>% mutate(logerrorAbs = abs(logerror))
+tails <- quantile(prop$logerrorAbs, c(.10, .90))
+prop <- prop %>% 
+  mutate(percentile = 
+           parse_factor(
+             ifelse(logerrorAbs <= tails[1], 
+                    "most accurate 10%", 
+                    ifelse(logerrorAbs >= tails[2], 
+                           "least accurate 10%",
+                           "middle 80%")),
+             levels=c("most accurate 10%", 
+                      "middle 80%", 
+                      "least accurate 10%"),
+             ordered=TRUE))
+data <- prop[prop$percentile!="middle 80%",]
+```
+  
+     
+Extremes in LogError:  As the total number of **Beds + Baths** increase, accuracy decreases.    
+   
+
+```{r bedbath_extremes, warning=FALSE}
+prop <- prop %>% mutate(numBedBath=numBed+numBath)
+data <- prop[prop$percentile!="middle 80%",]
+
+ggplot(data, aes(x=numBedBath)) +
+  geom_bar(aes(fill=percentile), position="fill")
+```
+   
+   
+Extremes in LogError:  The increased error seems to be with anamolous combinations of **bed+bath+sqft**.    
+E.g. unexpected number of beds or baths with the square feet of the home.       
+     
+     
+```{r bedbath_size_extremes, warning=FALSE}
+ggplot(data, aes(x=numBedBath, y=sqftFinishedAll)) +
+  geom_jitter(aes(color=percentile)) +
+  scale_y_continuous(limits=c(300,7500))
+```
+    
+     
+Square feet over 4000 increases error, as do number of units greater than single unit.       
+   
+    
+Extremes in LogError:  Annual **Tax Owed**        
+   
+- Higher tax value, higher error     
+    
+
+```{r tax_extremes, warning=FALSE}
+ggplot(data, aes(x=valueTax)) +
+  geom_histogram(aes(fill=percentile), binwidth = 1000, position="fill") +
+  scale_x_continuous(breaks=c(1000,5000,10000,20000,30000,40000,50000),
+                     labels = c("1k","5k","10k","20k","30k","40k","50k"),
+                     limits = c(100,50000))
+
+```
+   
+   
+Extremes in LogError: **Tax Past Due**              
+   
+- those with taxes past due have a higher error.  foreclosures?       
+   
+   
+```{r taxpastdue, warning=FALSE}
+ggplot(data, aes(x=as.factor(hasTaxPastDue))) +
+  geom_bar(aes(fill=percentile), position="fill")
+```
+
+   
+   
+Extremes in LogError: **FIPS & Location County**                
+    
+   
+FIPS: 06037 = Los Angeles County    
+FIPS: 06059 = Orange County    
+FIPS: 06111 - Ventura County    
+  
+We can see the largest number of errors occur in LA County.     
+Not surprising to me, as that has the most diverse properties.      
+  
+```{r fips, warning=FALSE}
+ggplot(data, aes(x=as.factor(locCounty))) +
+  geom_bar(aes(fill=percentile), position="fill")
+```
+     
+     
+Extremes in LogError: **Age of the Property**                  
+       
+Older homes are more difficult to predict.    
+     
+          
+```{r yearbuilt, warning=FALSE}
+ggplot(data, aes(x=yearBuilt)) +
+  geom_bar(aes(fill=percentile), position="fill") + 
+  scale_x_continuous(breaks=c(1880,1900,1920,1940,1960,1980,2000,2020),
+                     limits=c(1880,2020)) + 
+  facet_grid(locCounty~.)
+```
+     
+     
+Extremes in LogError: **Assessed Value** of Property                    
+      
+Higher value, higher error       
+   
+   
+     
+```{r assessedValue, warning=FALSE}
+ggplot(data, aes(x=valueAssessedStructure)) +
+  geom_histogram(aes(fill=percentile), binwidth = 500000, position="fill") + 
+  scale_x_continuous(breaks=c(0,500000,1000000,1500000,2000000,2500000,3000000,3500000,4000000,4500000,5000000,5500000,
+                              600000), 
+                     labels=c("0",".5m","1m","1.5m","2m","2.5m","3m","3.5m","4m","4.5m","5m","5.5m","6m"),
+                     limits=c(0,6000000)) + 
+  facet_grid(.~locCounty)
+
+```
+     
+     
+##### c. Clustering By County  
+
+                     
+     
+Prepare the latitude and longitude data to be able to cluster the data.       
+   
+   
+     
+```{r location_latlon, warning=FALSE, message=FALSE}
+prop <- prop %>% mutate(
+  locCounty=ifelse(
+    codeFIPS=="06037",  "Los Angeles County",
+    ifelse(codeFIPS=="06059", "Orange County",
+           ifelse(codeFIPS=="06111", "Ventura County", codeFIPS)))) %>%
+  mutate(locCounty=as.factor(locCounty))
+
+library(plyr)
+
+prop <- prop %>% ddply(.(locCounty), transform, 
+                         mean.lat = mean(locLatitude),
+                         sd.lat = sd(locLatitude),
+                         mean.lon = mean(locLongitude),
+                         sd.lon = sd(locLongitude)) %>%
+  ddply(.(locCounty), transform, 
+        locLatNorm = (locLatitude - mean.lat)/sd.lat,
+        locLonNorm = (locLongitude - mean.lon)/sd.lon)
+
+library(fpc)
+prop <- prop[!is.na(prop$locLatNorm),]
+tr.vc <- select(prop[prop$locCounty=="Ventura County",],
+                   locLatNorm,locLonNorm)
+tr.oc <- select(prop[prop$locCounty=="Orange County",],
+                   locLatNorm,locLonNorm)
+tr.la <- select(prop[prop$locCounty=="Los Angeles County",]
+                   ,locLatNorm,locLonNorm)
+```
+    
+     
+```{r cleanup, echo=FALSE, warning=FALSE, message=FALSE}
+rm(data); rm(house.lm); rm(cod); 
+```
+
+     
+Clustering By County:  **Ventura** County       
+
+     
+```{r vc, warning=FALSE}
+ds.vc <- dbscan(tr.vc, 0.05)
+plot(ds.vc, tr.vc)
+```
+
+     
+Clustering By County:  **Orange** County       
+    
+
+```{r oc, warning=FALSE}
+ds.oc <- dbscan(tr.oc, 0.03)
+plot(ds.oc, tr.oc)
+```
+     
+     
+Clustering By County:  **Los Angeles** County           
+
+     
+```{r la, warning=FALSE}
+ds.la <- dbscan(tr.la, 0.018)
+plot(ds.la, tr.la)
+
+```
+       
+
+____________________________________________________
+____________________________________________________
+
+
+### B. Data Modeling
+**GOAL** Turn the data prepared in the engineering phase into a prediction or valuable insight.
+1. Data Discovery
+2. Data Modeling
+
+____________________________________________________
+
+#### 1. Data Discovery
+**GOAL** Walk away with features that you now know drive the behavior of the data you are targeting  
+- Find patterns and potential insights in the data
+- Define how the features can be used to build a model
+- Identify the signals in the dataset that are of greater value
+- Identify interdependence or correlation among variables
+- Create synthetic features
+- Filter out redundant variables and extract the most valuable.
+- Also known as: Feature Engineering
+
+     
+
+##### a. Impute Missing Values           
+    
+     
+```{r impute, warning=FALSE, message=FALSE}
+library(caret)
+imputeVals <- preProcess(prop, method=c("medianImpute"))
+preproc.prop <- predict(imputeVals, prop)
+preproc.tr <- preproc.tr.prop[preproc.tr.prop$transactiondate<"2016-10-01" |
+                                preproc.tr.prop$transactiondate>="2017-01-01",]
+```
+   
+         
+##### c. Add New Features           
+      
+      
+```{r newvars, warning=FALSE, message=FALSE}
+require(geosphere); require(stringr); require(Metrics); require(caret)
+# require(catboost); 
+# don't use scientific notation when printing out
+options(scipen=999)
+
+preproc.tr <- preproc.tr %>% mutate(
+  sqftNetLiving = sqftFinishedAll-(120*numBed+30*numBath),
+  ratioLandValue = valueAssessedLand/
+                    (valueAssessedLand + valueAssessedStructure),
+  bathPower = numBath * sqftFinishedAll,
+      # sqft per room
+  sqftPerBed = sqftFinishedAll/max(numBed,1),
+      # sqft as ratio of lot size
+  sqftStructureToLot = sqftFinishedAll/sqftLot,
+  longmean = mean((locLongitude), na.rm=TRUE)/1e6,
+  latmean = mean((locLatitude), na.rm=TRUE)/1e6,
+  longitude = locLongitude/1e6,
+  latitude = locLatitude/1e6)
+  
+preproc.tr$geodist = distHaversine(preproc.tr[,38:39], preproc.tr[,40:41])
+
+```
+           
+                 
+                 
+##### d. Remove variables                   
+            
+    
+- factors (for now...could use these to ensemble a model on top of regression)           
+- linear dependent (used to create new features)             
+      
+     
+```{r rmvars}
+preproc.tr <- select(preproc.tr, logerror, parcelid, locCounty, numBath, numBed, numGarage, numUnits,
+                     rankBuildingCondition, valueAssessedAll, 
+                     sqftFinishedAll, sqftLot, sqftPool, sqftNetLiving, sqftPerBed, sqftStructureToLot,
+                     hasFireplace, hasTaxPastDue, hasDeckPatioShed, hasNeighborhood, 
+                     age, ratioLandValue, bathPower, geodist)
+```
+
+           
+##### e. Normalize By Column           
+            
+   
+     
+```{r norm}
+vars <- preproc.tr[,4:23]
+colMean <- apply(vars,2,mean)
+colSD <- apply(vars,2,sd)
+
+vars.norm <- as.data.frame(lapply(vars[,1], function(x) (x-colMean[1])/colSD[1]))
+colnames(vars.norm) <- colnames(vars[1:1])
+
+for (i in (2:length(vars))) {
+  vars.norm <- cbind(vars.norm, as.data.frame(lapply(vars[,i], function(x) (x-colMean[i])/colSD[i])))
+  colnames(vars.norm) <- colnames(vars[1:i])
+}
+
+preproc.tr <- cbind(preproc.tr[,1:3],vars.norm)
+
+```
+
+____________________________________________________
+
+
+#### 2. Data Learning
+**GOAL** Create a robust & generalizable model that is a mapping between features (inputs/independent variables) and a target variable (output/dependent variable) based on discoveries and transformations made in previous steps.
+- Select meta-parameters
+- Sampling the data (training/testing)
+- Train the model
+- Selecting algorithms
+- Evaluating results
+- Test the model 
+
+
+#### 2.1 Train the model  
+
+##### a. Create Function for Evaluation Metric                 
+            
+MAE: Mean Absolute Error            
+      
+     
+```{r mae}
+maeSummary <- function (data,
+                       lev = NULL,
+                       model = NULL) {
+  out <- mae(data$obs, data$pred)  
+  names(out) <- "MAE"
+  out
+  }
+```
+
+      
+      
+##### b. Train Control Parameters         
+            
+            
+     
+```{r trcontrol}
+zControl <- trainControl(method = "repeatedcv",
+                         number = 10,
+                         repeats = 10,
+                         search = "random",
+                         verboseIter = FALSE,
+                         returnResamp = "all",
+                         savePredictions = TRUE,
+                         summaryFunction = maeSummary,
+                         predictionBounds = c(TRUE,TRUE))
+```
+
+            
+##### c. Subset by County                  
+                 
+     
+```{r bycounty}
+tr1 <- select(preproc.tr[preproc.tr$locCounty==3101,], -parcelid, -locCounty)
+tr2 <- select(preproc.tr[preproc.tr$locCounty==1286,], -parcelid, -locCounty)
+tr3 <- select(preproc.tr[preproc.tr$locCounty==2061,], -parcelid, -locCounty)
+```
+           
+                 
+##### d. PreProcess (by County)                 
+          
+     
+```{r features}
+
+library(fastICA)
+set.seed(1234)
+preProcValues1 <- preProcess(tr1[,-1], method = c("nzv","ica"), n.comp=2)
+proc.tr1 <- predict(preProcValues1, tr1[,-1])
+proc.tr1 <- cbind(logerror=tr1[,1],proc.tr1)
+set.seed(1234)
+preProcValues2 <- preProcess(tr2[,-1], method = c("nzv","ica"), n.comp=2)
+proc.tr2 <- predict(preProcValues2, tr2[,-1])
+proc.tr2 <- cbind(logerror=tr2[,1],proc.tr2)
+set.seed(1234)
+preProcValues3 <- preProcess(tr3[,-1], method = c("nzv","ica"), n.comp=2)
+proc.tr3 <- predict(preProcValues3, tr3[,-1])
+proc.tr3 <- cbind(logerror=tr3[,1],proc.tr3)
+```
+
+                 
+##### e. Train a Linear Model              
+                    
+     
+```{r lm}
+set.seed(1234)
+zmod_lm1 <- train(logerror ~ ., 
+                 data = proc.tr1, 
+                 method = "lm",
+                 metric = "MAE",
+                 maximize = FALSE,
+                 trControl = zControl
+                 )
+
+set.seed(1234)
+zmod_lm2 <- train(logerror ~ ., 
+                 data = proc.tr2, 
+                 method = "lm",
+                 metric = "MAE",
+                 maximize = FALSE,
+                 trControl = zControl
+                 )
+
+set.seed(1234)
+zmod_lm3 <- train(logerror ~ ., 
+                 data = proc.tr3, 
+                 method = "lm",
+                 metric = "MAE",
+                 maximize = FALSE,
+                 trControl = zControl
+                 )
+zmod_lm1
+zmod_lm2
+zmod_lm3
+
+```
+
+                 
+##### f. Train a Robust Linear Model              
+    
+    
+                 
+```{r rlm}
+set.seed(1234)
+zmod_rlm1 <- train(logerror ~ ., 
+                 data = proc.tr1, 
+                 method = "rlm",
+                 metric = "MAE",
+                 maximize = FALSE,
+                 trControl = zControl
+                 )
+
+set.seed(1234)
+zmod_rlm2 <- train(logerror ~ ., 
+                 data = proc.tr2, 
+                 method = "rlm",
+                 metric = "MAE",
+                 maximize = FALSE,
+                 trControl = zControl
+                 )
+
+set.seed(1234)
+zmod_rlm3 <- train(logerror ~ ., 
+                 data = proc.tr3, 
+                 method = "rlm",
+                 metric = "MAE",
+                 maximize = FALSE,
+                 trControl = zControl
+                 )
+zmod_rlm1
+zmod_rlm2
+zmod_rlm3
+
+```
+               
+##### g. Model details:  meta-parameters, sampling, model, features, pre-processing steps
+
+- **Model** Robust Linear Model     
+- **fetaures** 
+  - locCounty, geodist              
+  - numBath, bathPower, numBed, numGarage, numUnits              
+  - rankBuildingCondition, age             
+  - valueAssessedAll, ratioLandValue              
+  - sqftFinishedAll, sqftLot, sqftPool, sqftNetLiving, sqftPerBed, sqftStructureToLot               
+  - hasFireplace, hasTaxPastDue, hasDeckPatioShed, hasNeighborhood             
+- **Preprocess** 
+  - normalize each column independently based on each columns mean & standard deviation calculated from the training set.  
+  - Impute values using median impute method  
+  - "nzv" (near-zero value),"ica" (independent component analysis) with 2 components, and "center" & "scale" (done as a substep of ICA)       
+- **Sampling**
+  - Increase sampling through repeated cross validation, over 10 resampling iterations, computing 10 complete sets of folds in each iteration.  
+  - Divide the dataset by county...each county has it's own model.  
+- **Evaluation**
+  - Evaluate performance using MAE  
+  - Set prediction bounds to be existing max and min from Training data.   
+                       
+____________________________________________________
+        
+#### 2.2 Test the model: Run Robust Linear Model     
+##### a. Generate Test Data                
+            
+     
+```{r test_df}
+ts.prop <- preproc.tr.prop[preproc.tr.prop$transactiondate>="2016-10-01" & 
+                             preproc.tr.prop$transactiondate<"2017-01-01",]
+```
+   
+##### b. Features                   
+
+```{r create_features}
+ts.prop <- ts.prop %>% mutate(
+  sqftNetLiving = sqftFinishedAll-(120*numBed+30*numBath),
+  ratioLandValue = valueAssessedLand/
+                    (valueAssessedLand + valueAssessedStructure),
+  bathPower = numBath * sqftFinishedAll,
+      # sqft per room
+  sqftPerBed = sqftFinishedAll/max(numBed,1),
+      # sqft as ratio of lot size
+  sqftStructureToLot = sqftFinishedAll/sqftLot,
+  longmean = mean((locLongitude), na.rm=TRUE)/1e6,
+  latmean = mean((locLatitude), na.rm=TRUE)/1e6,
+  longitude = locLongitude/1e6,
+  latitude = locLatitude/1e6)
+  
+ts.prop$geodist = distHaversine(ts.prop[,38:39], ts.prop[,40:41])
+
+ts.prop <- ts.prop[,c(2,1,19,4:5,9,21,6,24,7,12:13,33,36:37,28:32,34:35,42)]
+```
+   
+##### c. Normalize values by column based on parameters from training data         
+  
+```{r normalize_test}
+vars <- ts.prop[,4:23]
+vars.norm <- as.data.frame(lapply(vars[,1], function(x) (x-colMean[1])/colSD[1]))
+colnames(vars.norm) <- colnames(vars[1:1])
+
+for (i in (2:length(vars))) {
+  vars.norm <- cbind(vars.norm, as.data.frame(lapply(vars[,i], function(x) (x-colMean[i])/colSD[i])))
+  colnames(vars.norm) <- colnames(vars[1:i])
+}
+
+ts.prop <- cbind(ts.prop[,1:3],vars.norm)
+```
+      
+##### d. Break up by County          
+   
+```{r county_test}
+ts1 <- ts.prop[ts.prop$locCounty==3101,]; ts1 <- ts1[,-c(2:3)]
+ts2 <- ts.prop[ts.prop$locCounty==1286,]; ts2 <- ts2[,-c(2:3)]
+ts3 <- ts.prop[ts.prop$locCounty==2061,]; ts3 <- ts3[,-c(2:3)]
+```
+      
+##### e. Preprocess using method generated from test              
+    
+```{r test_preproc}
+proc.ts1 <- predict(preProcValues1, ts1[,-1])
+proc.ts1 <- cbind(logerror=ts1[,1],proc.ts1)
+proc.ts2 <- predict(preProcValues2, ts2[,-1])
+proc.ts2 <- cbind(logerror=ts2[,1],proc.ts2)
+proc.ts3 <- predict(preProcValues3, ts3[,-1])
+proc.ts3 <- cbind(logerror=ts3[,1],proc.ts3)
+```
+      
+##### f. Predict LogError on Test Data using zmod_rlm                    
+    
+```{r predict_test}
+pred1 <- predict(zmod_rlm1, proc.ts1)
+pred2 <- predict(zmod_rlm2, proc.ts2)
+pred3 <- predict(zmod_rlm3, proc.ts3)
+```
+      
+##### g. Evaluate MAE of LogError vs. Predicted LogError                    
+    
+```{r evaluate_test}
+
+pred_rlm <- rbind(cbind(ts.prop[ts.prop$locCounty==3101,][,c(1:2)], 
+                        logerror_hat = pred1),
+                  cbind(ts.prop[ts.prop$locCounty==1286,][,c(1:2)], 
+                        logerror_hat = pred2),
+                  cbind(ts.prop[ts.prop$locCounty==2061,][,c(1:2)], 
+                        logerror_hat = pred3))
+mae(pred_rlm$logerror, pred_rlm$logerror_hat)
+```
+           
+
+____________________________________________________
+____________________________________________________
+
+
+### C. Information Distillation
+**GOAL**  Summarize the previous stages and making it available to you customers/end users
+1. Insight, delivery, visualization
+2. Data product creation
+
+#### 1. Insight, Delivery, Visualization
+**GOAL** Deliver the work in a consumable way to the stakeholders of the project so that the goals can be met.  
+- Summarize insights into actionable items
+- Advocate for your findings and recommendations through visualizations
+- Deliver the model, the report and/or other data product to the stakeholders.
+- This is the most critical step in order to make use of all the work done to this point. 
+
+#### 2. Data Product Creation
+**GOAL** Enable a machine learning model to be consumed through an interface by an end user  
+- This is about deploying a model to production, or productionizing the model, so that it is live and consumable in the desired manner
+- This is usually done through an API
+- The web application will take data input by the user, and the model will take that data, extract/compute the features, feed them to the model which will generate results.  
+- These results will then be fed back to the web application for it to respond accordingly, such as display a particular product for the end user. 
+
+
+   
+##### a. Using Complete Data Set, Impute Values        
+                
+                
+```{r sub_impute, warning=FALSE, message=FALSE}
+
+preproc.prop <- predict(imputeVals, prop)
+```
+
+
+##### b. Features       
+   
+   
+```{r sub_features}
+preproc.prop <- preproc.prop %>% mutate(
+  sqftNetLiving = sqftFinishedAll-(120*numBed+30*numBath),
+  ratioLandValue = valueAssessedLand/
+                    (valueAssessedLand + valueAssessedStructure),
+  bathPower = numBath * sqftFinishedAll,
+      # sqft per room
+  sqftPerBed = sqftFinishedAll/max(numBed,1),
+      # sqft as ratio of lot size
+  sqftStructureToLot = sqftFinishedAll/sqftLot,
+  longmean = mean((locLongitude), na.rm=TRUE)/1e6,
+  latmean = mean((locLatitude), na.rm=TRUE)/1e6,
+  longitude = locLongitude/1e6,
+  latitude = locLatitude/1e6)
+
+preproc.prop$geodist = distHaversine(preproc.prop[,36:37], preproc.prop[,38:39])
+
+preproc.prop <- preproc.prop[,c(1,17,2:3,7,19,4,22,5,10:11,31,34:35,26:30,32:33,40)]
+```
+
+   
+##### c. Normalize values by column based on parameters from training data         
+    
+  
+```{r normalize_sub}
+
+vars <- preproc.prop[,3:22]
+vars.norm <- as.data.frame(lapply(vars[,1], function(x) (x-colMean[1])/colSD[1]))
+colnames(vars.norm) <- colnames(vars[1:1])
+
+for (i in (2:length(vars))) {
+  vars.norm <- cbind(vars.norm, as.data.frame(lapply(vars[,i], function(x) (x-colMean[i])/colSD[i])))
+  colnames(vars.norm) <- colnames(vars[1:i])
+}
+
+preproc.prop <- cbind(preproc.prop[,1:2],vars.norm)
+```
+      
+##### d. Break up by County          
+    
+   
+```{r county_sub}
+prop1 <- preproc.prop[preproc.prop$locCounty==3101,][,-c(1:2)]
+prop2 <- preproc.prop[preproc.prop$locCounty==1286,][,-c(1:2)]
+prop3 <- preproc.prop[preproc.prop$locCounty==2061,][,-c(1:2)]
+```
+      
+##### e. Preprocess using method generated from test              
+    
+```{r sub_preproc}
+proc.prop1 <- predict(preProcValues1, prop1)
+proc.prop2 <- predict(preProcValues2, prop2)
+proc.prop3 <- predict(preProcValues3, prop3)
+```
+      
+##### f. Predict LogError on Complete Data using zmod_rlm                    
+    
+```{r predict_sub}
+
+pred1 <- predict(zmod_rlm1, proc.prop1)
+pred2 <- predict(zmod_rlm2, proc.prop2)
+pred3 <- predict(zmod_rlm3, proc.prop3)
+```
+      
+##### g. Clean up data frame & export for submission                       
+    
+```{r export_sub}
+
+pred_rlm <- rbind(cbind(parcelid=preproc.prop[preproc.prop$locCounty==3101,][,1],
+                        `201610` = pred1),
+                  cbind(parcelid=preproc.prop[preproc.prop$locCounty==1286,][,1],
+                        `201610` = pred2),
+                  cbind(parcelid=preproc.prop[preproc.prop$locCounty==2061,][,1],
+                        `201610` = pred3))
+require(dplyr)
+mypred <- cbind(pred_rlm, 
+                `201611`=pred_rlm[,2],
+                `201612`=pred_rlm[,2],
+                `201710`=pred_rlm[,2],
+                `201711`=pred_rlm[,2],
+                `201712`=pred_rlm[,2])
+
+write.table(mypred,file="Best_Submission.csv",sep=",",
+            col.names = TRUE, row.names = FALSE)
+head(mypred)
+```
+        

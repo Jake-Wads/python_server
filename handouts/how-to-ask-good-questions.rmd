@@ -1,0 +1,71 @@
+---
+title: Asking Good Questions
+output:
+    tufte::tufte_handout: default
+    tufte::tufte_html: default
+---
+
+In general, ask pointed, specific questions.
+
+The following statements are **not** questions^[Read: your Codeup instructors
+will probably be forgiving here, but you absolutely should not bring these to a
+supervisor / peer.]
+
+> - I don't know what to do.
+> - My code isn't working.
+
+## Before Asking a Question
+
+0. Understand the problem[^1]
+
+1. Research[^2]
+
+1. Be polite and give context[^3]
+
+[^1]:
+    If you go from "something isn't working" to asking a question in under 5
+    minutes, you haven't spent enough time trying to understand or research the
+    problem. Try stating your problem out loud in plain english to your rubber
+    duck.
+
+[^2]:
+    That is, google it! Try out possible solutions you find online.
+
+[^3]:
+    Before asking your question, it's generally considered good form to make sure
+    the person you are asking has time.
+
+    > "Do you have a minute to look at some Python code?"
+    > "Is now a good time to chat with you about a database issue?"
+
+    Give context on what is going on. Don't assume the person you are asking
+    knows exactly what you are working on!
+
+    > "I'm trying to do x, y, and z, and I'm going to show you some code to do x"
+
+    Be sure to explain what you have tried that *didn't* work.
+
+## Examples
+
+- **Bad**: Why isn't this working?
+- **Better**: Can you help me figure out why this code isn't running when I
+  access a list element?
+- **Good**: I'm trying to access the third element in this list with the code on
+  line 83, can you help me figure out why I'm getting an `IndexError`?
+
+---
+
+- **Bad**: Is this code good?
+- **Better**: What do you think of this function?
+- **Good**: I made a function to do x and y, and it takes z as input. Would you
+  do this any differently?
+
+---
+
+- **Bad**: Can you tell me what to do?
+- **Better**: Can you provide some general guidance on how to get started?
+- **Better**: Can you help me break this problem down into smaller steps?
+- **Good**: I know I need to to x, and I think y and z can help me get there. Is
+  this a good path to go down? Can you help explain how to use y and z to get to
+  x?
+

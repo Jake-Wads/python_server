@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+tail -n +3 $0 | dot -Tsvg > ${0%dot}svg ; exit $?
+digraph {
+    node [fontname=menlo shape=rect]
+    rankdir=TB
+
+    subgraph cluster_laptop {
+        label="Your Laptop"
+
+        pyspark [label="pyspark"]
+        spark [shape=plaintext label=<
+            <table border="0" cellborder="1" cellspacing="0">
+                <tr><td>JVM</td></tr>
+                <tr><td>Spark Master</td></tr>
+                <tr><td port="e">Executor</td></tr>
+            </table>
+        >]
+        pyspark -> spark [label="talks to"]
+
+        p1 [label="Data Partition"]
+        p2 [label="Data Partition"]
+        p3 [label="Data Partition"]
+
+        spark:e -> {p1, p2, p3}
+
+        {rank=max p1 p2 p3}
+        {rank=same pyspark spark}
+    }
+
+}

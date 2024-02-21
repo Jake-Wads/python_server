@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xl="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="-71 148 1017 812" width="1017" height="812">
+  <defs>
+    <font-face font-family="Helvetica Neue" font-size="16" panose-1="2 0 5 3 0 0 0 2 0 4" units-per-em="1000" underline-position="-100" underline-thickness="50" slope="0" x-height="517" cap-height="714" ascent="951.9958" descent="-212.99744" font-weight="400">
+      <font-face-src>
+        <font-face-name name="HelveticaNeue"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Helvetica Neue" font-size="16" panose-1="2 0 8 3 0 0 0 9 0 4" units-per-em="1000" underline-position="-100" underline-thickness="50" slope="0" x-height="517" cap-height="714" ascent="975.0061" descent="-216.99524" font-weight="700">
+      <font-face-src>
+        <font-face-name name="HelveticaNeue-Bold"/>
+      </font-face-src>
+    </font-face>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="FilledArrow_Marker" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-1 -4 10 8" markerWidth="10" markerHeight="8" color="black">
+      <g>
+        <path d="M 8 0 L 0 -3 L 0 3 Z" fill="currentColor" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <font-face font-family="Helvetica Neue" font-size="21" panose-1="2 0 5 3 0 0 0 2 0 4" units-per-em="1000" underline-position="-100" underline-thickness="50" slope="0" x-height="517" cap-height="714" ascent="951.9958" descent="-212.99744" font-weight="400">
+      <font-face-src>
+        <font-face-name name="HelveticaNeue"/>
+      </font-face-src>
+    </font-face>
+  </defs>
+  <metadata> Produced by OmniGraffle 7.17.4\n2020-09-17 15:03:25 +0000</metadata>
+  <g id="Canvas_1" fill="none" stroke="none" stroke-dasharray="none" stroke-opacity="1" fill-opacity="1">
+    <title>Canvas 1</title>
+    <rect fill="white" x="-71" y="148" width="1017" height="812"/>
+    <g id="Canvas_1_Layer_1">
+      <title>Layer 1</title>
+      <g id="Graphic_3">
+        <rect x="333" y="205.5" width="184.5" height="114.5" fill="white"/>
+        <rect x="333" y="205.5" width="184.5" height="114.5" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(338 235.078)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="37.162" y="15">Does your ML </tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="6.93" y="33.448">algorithm, your model, </tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="26.346" y="51.895996">rely on distance?</tspan>
+        </text>
+      </g>
+      <g id="Graphic_7">
+        <rect x="126.5" y="386.5" width="184.5" height="114.5" fill="white"/>
+        <rect x="126.5" y="386.5" width="184.5" height="114.5" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(131.5 406.34595)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="30.65" y="15">Then scale your </tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="16.714" y="33.448">numeric features so </tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="10.93" y="51.895996">you’re not comparing </tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="700" fill="black" x="12.314" y="71.34399">age</tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" y="71.34399"> to </tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="700" fill="black" y="71.34399">cm </tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" y="71.34399">to </tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="700" fill="black" y="71.34399">dollars</tspan>
+        </text>
+      </g>
+      <g id="Graphic_8">
+        <rect x="544.5" y="386.5" width="184.5" height="114.5" fill="white"/>
+        <rect x="544.5" y="386.5" width="184.5" height="114.5" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(549.5 425.302)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="26.65" y="15">No need to scale </tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="27.53" y="33.448">numeric features</tspan>
+        </text>
+      </g>
+      <g id="Line_10">
+        <line x1="359.9344" y1="320" x2="291.51053" y2="379.97443" marker-end="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_11">
+        <line x1="492.1471" y1="320" x2="562.33124" y2="380.06302" marker-end="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_12">
+        <text transform="translate(264.621 153)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="21" font-weight="400" fill="black" x="7958079e-19" y="20">Do we need to scale our features?</tspan>
+        </text>
+      </g>
+      <g id="Graphic_14">
+        <text transform="translate(280.816 337.5)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="552447e-18" y="15">Yes</tspan>
+        </text>
+      </g>
+      <g id="Graphic_15">
+        <text transform="translate(549.5 337.5)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="7.821501" y="15">No</tspan>
+        </text>
+      </g>
+      <g id="Graphic_17"/>
+      <g id="Graphic_22"/>
+      <g id="Graphic_21"/>
+      <g id="Graphic_20"/>
+      <g id="Graphic_24">
+        <text transform="translate(294.3885 561.5)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="21" font-weight="400" fill="black" x="2.919" y="20">How do we tell if the model </tspan>
+          <tspan font-family="Helvetica Neue" font-size="21" font-weight="400" fill="black" x="48.7935" y="44.588">relies on distance</tspan>
+        </text>
+      </g>
+      <g id="Graphic_25">
+        <rect x="333" y="629" width="184.5" height="114.5" fill="white"/>
+        <rect x="333" y="629" width="184.5" height="114.5" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(338 639.62195)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="17.01" y="15">Does that algorithm </tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="18.362" y="34.448">have </tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="700" fill="black" y="34.448">distance </tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" y="34.448">as a </tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="18.346" y="52.91211">hyper-parameter or </tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="3.81" y="71.36011">mention distance in the </tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="29.002" y="89.80811">documentation?</tspan>
+        </text>
+      </g>
+      <g id="Graphic_34">
+        <rect x="63" y="792.5" width="248" height="166.5" fill="white"/>
+        <rect x="63" y="792.5" width="248" height="166.5" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(68 820.63)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="21.496" y="15">Distance based algorithms:</tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="57.808" y="33.448">Linear regression</tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="51.736" y="51.895996">Logistic regression</tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="43.736" y="70.34399">K-Nearest Neighbors</tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="32.312" y="88.79199">Support Vector Machine</tspan>
+        </text>
+      </g>
+      <g id="Graphic_35">
+        <rect x="544.5" y="792.5" width="248" height="166.5" fill="white"/>
+        <rect x="544.5" y="792.5" width="248" height="166.5" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(549.5 829.63)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="4.456" y="15">Non-distance based algorithms:</tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="66.992" y="33.448">Decision Trees</tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="59.872" y="51.895996">Random Forests</tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="39.864" y="70.34399">Any tree-based model</tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="74.56" y="88.79199">Naive Bayes</tspan>
+        </text>
+      </g>
+      <g id="Line_36">
+        <line x1="353.2721" y1="743.5" x2="299.41458" y2="786.3374" marker-end="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_37">
+        <line x1="498.73846" y1="743.5" x2="553.82704" y2="786.4159" marker-end="url(#FilledArrow_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_38">
+        <text transform="translate(280.816 742)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="552447e-18" y="15">Yes</tspan>
+        </text>
+      </g>
+      <g id="Graphic_41">
+        <text transform="translate(549.5 742)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="7.821501" y="15">No</tspan>
+        </text>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,623 @@
+In [3]: df.head()
+Out[3]: 
+             ip                     timestamp            ...            destination             request_agent
+0  97.105.19.58  [16/Apr/2019:19:34:42 +0000]            ...                    NaN  "python-requests/2.21.0"
+1  97.105.19.58  [16/Apr/2019:19:34:42 +0000]            ...                    NaN  "python-requests/2.21.0"
+2  97.105.19.58  [16/Apr/2019:19:34:44 +0000]            ...                    NaN  "python-requests/2.21.0"
+3  97.105.19.58  [16/Apr/2019:19:34:46 +0000]            ...                    NaN  "python-requests/2.21.0"
+4  97.105.19.58  [16/Apr/2019:19:34:48 +0000]            ...                    NaN  "python-requests/2.21.0"
+
+[5 rows x 7 columns]
+
+In [4]: df.info()
+<class 'pandas.core.frame.DataFrame'>
+Int64Index: 13978 entries, 0 to 3
+Data columns (total 7 columns):
+ip                13978 non-null object
+timestamp         13978 non-null object
+request_method    13978 non-null object
+status            13978 non-null int64
+size              13978 non-null int64
+destination       25 non-null object
+request_agent     13978 non-null object
+dtypes: int64(2), object(5)
+memory usage: 873.6+ KB
+
+In [5]: df.describe(include='all')
+Out[5]: 
+                  ip            ...                        request_agent
+count          13978            ...                                13978
+unique            22            ...                                   10
+top     97.105.19.58            ...             "python-requests/2.21.0"
+freq           11999            ...                                12001
+mean             NaN            ...                                  NaN
+std              NaN            ...                                  NaN
+min              NaN            ...                                  NaN
+25%              NaN            ...                                  NaN
+50%              NaN            ...                                  NaN
+75%              NaN            ...                                  NaN
+max              NaN            ...                                  NaN
+
+[11 rows x 7 columns]
+
+In [6]: df.timestamp = df.timestamp.str.replace(r'(\[|\])', '', regex=True)
+
+In [7]: df[['timestamp']].head()
+Out[7]: 
+                    timestamp
+0  16/Apr/2019:19:34:42 +0000
+1  16/Apr/2019:19:34:42 +0000
+2  16/Apr/2019:19:34:44 +0000
+3  16/Apr/2019:19:34:46 +0000
+4  16/Apr/2019:19:34:48 +0000
+
+In [8]: df.timestamp = pd.to_datetime(df.timestamp.str.replace(':', ' ', 1))
+
+In [9]: df[['timestamp']].head()
+Out[9]: 
+            timestamp
+0 2019-04-16 19:34:42
+1 2019-04-16 19:34:42
+2 2019-04-16 19:34:44
+3 2019-04-16 19:34:46
+4 2019-04-16 19:34:48
+
+In [10]: df = df.set_index('timestamp')
+
+In [11]: df.info()
+<class 'pandas.core.frame.DataFrame'>
+DatetimeIndex: 13978 entries, 2019-04-16 19:34:42 to 2019-04-19 19:42:41
+Data columns (total 6 columns):
+ip                13978 non-null object
+request_method    13978 non-null object
+status            13978 non-null int64
+size              13978 non-null int64
+destination       25 non-null object
+request_agent     13978 non-null object
+dtypes: int64(2), object(4)
+memory usage: 764.4+ KB
+
+In [12]: df[['request_method']].head()
+Out[12]: 
+                                           request_method
+timestamp                                                
+2019-04-16 19:34:42  "GET /api/v1/sales?page=81 HTTP/1.1"
+2019-04-16 19:34:42          "GET /api/v1/items HTTP/1.1"
+2019-04-16 19:34:44  "GET /api/v1/sales?page=82 HTTP/1.1"
+2019-04-16 19:34:46  "GET /api/v1/sales?page=83 HTTP/1.1"
+2019-04-16 19:34:48  "GET /api/v1/sales?page=84 HTTP/1.1"
+
+In [13]: for col in ['request_method','request_agent','destination']:
+    ...:     df[col] = df[col].str.replace('"','')
+    ...:     
+
+In [14]: df[['request_method']].head()
+Out[14]: 
+                                         request_method
+timestamp                                              
+2019-04-16 19:34:42  GET /api/v1/sales?page=81 HTTP/1.1
+2019-04-16 19:34:42          GET /api/v1/items HTTP/1.1
+2019-04-16 19:34:44  GET /api/v1/sales?page=82 HTTP/1.1
+2019-04-16 19:34:46  GET /api/v1/sales?page=83 HTTP/1.1
+2019-04-16 19:34:48  GET /api/v1/sales?page=84 HTTP/1.1
+
+In [15]: df.request_method.nunique()
+Out[15]: 220
+
+In [16]: df['request_method'] = df.request_method.str.replace(r'\?page=[0-9]+', '', regex=True)
+
+In [17]: df[['request_method']].head()
+Out[17]: 
+                                 request_method
+timestamp                                      
+2019-04-16 19:34:42  GET /api/v1/sales HTTP/1.1
+2019-04-16 19:34:42  GET /api/v1/items HTTP/1.1
+2019-04-16 19:34:44  GET /api/v1/sales HTTP/1.1
+2019-04-16 19:34:46  GET /api/v1/sales HTTP/1.1
+2019-04-16 19:34:48  GET /api/v1/sales HTTP/1.1
+
+In [18]: df.request_method.nunique()
+Out[18]: 22
+
+In [19]: df.request_method.value_counts(dropna=False)
+Out[19]: 
+GET /api/v1/sales HTTP/1.1                      12403
+GET /api/v1/items HTTP/1.1                       1065
+GET /api/v1/stores HTTP/1.1                       229
+GET / HTTP/1.1                                    107
+GET /documentation HTTP/1.1                       100
+GET /favicon.ico HTTP/1.1                          26
+GET /api/v1//api/v1/items HTTP/1.1                 11
+GET /api/v1/items/api/v1/items HTTP/1.1             7
+GET /api/v1/items/next_page HTTP/1.1                5
+GET /api/v1/ HTTP/1.1                               4
+GET /api/v1/sales/HTTP/1.1                          3
+GET /api/v1/store HTTP/1.1                          3
+GET /api/v1/sales/ HTTP/1.1                         3
+GET /api/v1/itemsitems HTTP/1.1                     3
+GET /api/v1items HTTP/1.1                           2
+GET /api/v1/items/HTTP/1.1                          1
+GET /api/v1 HTTP/1.1                                1
+GET /api/V1/HiZach! HTTP/1.1                        1
+GET /api/v1//api/v1/items/next_page HTTP/1.1        1
+GET /api/v1/I_DIDNT_DO_IT!!!! HTTP/1.1              1
+GET /api/v1/helloclass! HTTP/1.1                    1
+GET /api/v1/items&page=0 HTTP/1.1                   1
+Name: request_method, dtype: int64
+
+In [20]: df.request_method.value_counts(dropna=False)/df.request_method.count()
+Out[20]: 
+GET /api/v1/sales HTTP/1.1                      0.887323
+GET /api/v1/items HTTP/1.1                      0.076191
+GET /api/v1/stores HTTP/1.1                     0.016383
+GET / HTTP/1.1                                  0.007655
+GET /documentation HTTP/1.1                     0.007154
+GET /favicon.ico HTTP/1.1                       0.001860
+GET /api/v1//api/v1/items HTTP/1.1              0.000787
+GET /api/v1/items/api/v1/items HTTP/1.1         0.000501
+GET /api/v1/items/next_page HTTP/1.1            0.000358
+GET /api/v1/ HTTP/1.1                           0.000286
+GET /api/v1/sales/HTTP/1.1                      0.000215
+GET /api/v1/store HTTP/1.1                      0.000215
+GET /api/v1/sales/ HTTP/1.1                     0.000215
+GET /api/v1/itemsitems HTTP/1.1                 0.000215
+GET /api/v1items HTTP/1.1                       0.000143
+GET /api/v1/items/HTTP/1.1                      0.000072
+GET /api/v1 HTTP/1.1                            0.000072
+GET /api/V1/HiZach! HTTP/1.1                    0.000072
+GET /api/v1//api/v1/items/next_page HTTP/1.1    0.000072
+GET /api/v1/I_DIDNT_DO_IT!!!! HTTP/1.1          0.000072
+GET /api/v1/helloclass! HTTP/1.1                0.000072
+GET /api/v1/items&page=0 HTTP/1.1               0.000072
+Name: request_method, dtype: float64
+
+In [21]: ip_df = df.request_method.value_counts(dropna=False)/df.request_method.count()
+
+In [22]: ip_df
+Out[22]: 
+GET /api/v1/sales HTTP/1.1                      0.887323
+GET /api/v1/items HTTP/1.1                      0.076191
+GET /api/v1/stores HTTP/1.1                     0.016383
+GET / HTTP/1.1                                  0.007655
+GET /documentation HTTP/1.1                     0.007154
+GET /favicon.ico HTTP/1.1                       0.001860
+GET /api/v1//api/v1/items HTTP/1.1              0.000787
+GET /api/v1/items/api/v1/items HTTP/1.1         0.000501
+GET /api/v1/items/next_page HTTP/1.1            0.000358
+GET /api/v1/ HTTP/1.1                           0.000286
+GET /api/v1/sales/HTTP/1.1                      0.000215
+GET /api/v1/store HTTP/1.1                      0.000215
+GET /api/v1/sales/ HTTP/1.1                     0.000215
+GET /api/v1/itemsitems HTTP/1.1                 0.000215
+GET /api/v1items HTTP/1.1                       0.000143
+GET /api/v1/items/HTTP/1.1                      0.000072
+GET /api/v1 HTTP/1.1                            0.000072
+GET /api/V1/HiZach! HTTP/1.1                    0.000072
+GET /api/v1//api/v1/items/next_page HTTP/1.1    0.000072
+GET /api/v1/I_DIDNT_DO_IT!!!! HTTP/1.1          0.000072
+GET /api/v1/helloclass! HTTP/1.1                0.000072
+GET /api/v1/items&page=0 HTTP/1.1               0.000072
+Name: request_method, dtype: float64
+
+In [23]: ip_df = pd.DataFrame(df.request_method.value_counts(dropna=False)/df.request_method.count()).reset_ind
+    ...: ex().rename(index=str, columns={'index': 'ip', 'ip': 'ip_proba'})
+
+In [24]: ip_df.head()
+Out[24]: 
+                            ip  request_method
+0   GET /api/v1/sales HTTP/1.1        0.887323
+1   GET /api/v1/items HTTP/1.1        0.076191
+2  GET /api/v1/stores HTTP/1.1        0.016383
+3               GET / HTTP/1.1        0.007655
+4  GET /documentation HTTP/1.1        0.007154
+
+In [25]: ip_df = pd.DataFrame(df.request_method.value_counts(dropna=False)/df.request_method.count()).reset_ind
+    ...: ex().rename(index=str, columns={'index': 'request_method', 'request_method': 'method_proba'})
+
+In [26]: request_df = pd.DataFrame(df.request_method.value_counts(dropna=False)/df.request_method.count()).rese
+    ...: t_index().rename(index=str, columns={'index': 'request_method', 'request_method': 'method_proba'})
+
+In [27]: request_df.head()
+Out[27]: 
+                request_method  method_proba
+0   GET /api/v1/sales HTTP/1.1      0.887323
+1   GET /api/v1/items HTTP/1.1      0.076191
+2  GET /api/v1/stores HTTP/1.1      0.016383
+3               GET / HTTP/1.1      0.007655
+4  GET /documentation HTTP/1.1      0.007154
+
+In [28]: request_df[request_df.method_proba <.001]
+Out[28]: 
+                                  request_method  method_proba
+6             GET /api/v1//api/v1/items HTTP/1.1      0.000787
+7        GET /api/v1/items/api/v1/items HTTP/1.1      0.000501
+8           GET /api/v1/items/next_page HTTP/1.1      0.000358
+9                          GET /api/v1/ HTTP/1.1      0.000286
+10                    GET /api/v1/sales/HTTP/1.1      0.000215
+11                    GET /api/v1/store HTTP/1.1      0.000215
+12                   GET /api/v1/sales/ HTTP/1.1      0.000215
+13               GET /api/v1/itemsitems HTTP/1.1      0.000215
+14                     GET /api/v1items HTTP/1.1      0.000143
+15                    GET /api/v1/items/HTTP/1.1      0.000072
+16                          GET /api/v1 HTTP/1.1      0.000072
+17                  GET /api/V1/HiZach! HTTP/1.1      0.000072
+18  GET /api/v1//api/v1/items/next_page HTTP/1.1      0.000072
+19        GET /api/v1/I_DIDNT_DO_IT!!!! HTTP/1.1      0.000072
+20              GET /api/v1/helloclass! HTTP/1.1      0.000072
+21             GET /api/v1/items&page=0 HTTP/1.1      0.000072
+
+In [29]: train = df['2019-04-16 19:34:42':'2019-04-17 12:55:14']
+
+In [30]: train.describe()
+Out[30]: 
+             status           size
+count  13974.000000   13974.000000
+mean     200.342350  449900.797338
+std       10.112012  160742.535606
+min      200.000000       0.000000
+25%      200.000000  500637.000000
+50%      200.000000  510138.000000
+75%      200.000000  511291.000000
+max      499.000000  513736.000000
+
+In [31]: request_df = pd.DataFrame(df.request_method.value_counts(dropna=False)/df.request_method.count()).rese
+    ...: t_index().rename(index=str, columns={'index': 'request_method', 'request_method': 'method_proba'})
+
+In [32]: train.head()
+Out[32]: 
+                               ip           ...                     request_agent
+timestamp                                   ...                                  
+2019-04-16 19:34:42  97.105.19.58           ...            python-requests/2.21.0
+2019-04-16 19:34:42  97.105.19.58           ...            python-requests/2.21.0
+2019-04-16 19:34:44  97.105.19.58           ...            python-requests/2.21.0
+2019-04-16 19:34:46  97.105.19.58           ...            python-requests/2.21.0
+2019-04-16 19:34:48  97.105.19.58           ...            python-requests/2.21.0
+
+[5 rows x 6 columns]
+
+In [33]: request_df = pd.DataFrame(train.request_method.value_counts(dropna=False)/train.request_method.count()
+    ...: ).reset_index().rename(index=str, columns={'index': 'request_method', 'request_method': 'method_proba'
+    ...: })
+
+In [34]: request_df.head()
+Out[34]: 
+                request_method  method_proba
+0   GET /api/v1/sales HTTP/1.1      0.887577
+1   GET /api/v1/items HTTP/1.1      0.076213
+2  GET /api/v1/stores HTTP/1.1      0.016388
+3               GET / HTTP/1.1      0.007657
+4  GET /documentation HTTP/1.1      0.007156
+
+In [35]: train.head()
+Out[35]: 
+                               ip           ...                     request_agent
+timestamp                                   ...                                  
+2019-04-16 19:34:42  97.105.19.58           ...            python-requests/2.21.0
+2019-04-16 19:34:42  97.105.19.58           ...            python-requests/2.21.0
+2019-04-16 19:34:44  97.105.19.58           ...            python-requests/2.21.0
+2019-04-16 19:34:46  97.105.19.58           ...            python-requests/2.21.0
+2019-04-16 19:34:48  97.105.19.58           ...            python-requests/2.21.0
+
+[5 rows x 6 columns]
+
+In [36]: df.reset_index().merge(request_df, on=['request_method'], how='left').fillna(value=0)
+Out[36]: 
+                timestamp             ip      ...                request_agent  method_proba
+0     2019-04-16 19:34:42   97.105.19.58      ...       python-requests/2.21.0      0.887577
+1     2019-04-16 19:34:42   97.105.19.58      ...       python-requests/2.21.0      0.076213
+2     2019-04-16 19:34:44   97.105.19.58      ...       python-requests/2.21.0      0.887577
+3     2019-04-16 19:34:46   97.105.19.58      ...       python-requests/2.21.0      0.887577
+4     2019-04-16 19:34:48   97.105.19.58      ...       python-requests/2.21.0      0.887577
+5     2019-04-16 19:34:48   97.105.19.58      ...       python-requests/2.21.0      0.016388
+6     2019-04-16 19:34:50   97.105.19.58      ...       python-requests/2.21.0      0.887577
+7     2019-04-16 19:34:52   97.105.19.58      ...       python-requests/2.21.0      0.887577
+8     2019-04-16 19:34:52   97.105.19.58      ...       python-requests/2.21.0      0.007657
+9     2019-04-16 19:34:53   97.105.19.58      ...       python-requests/2.21.0      0.076213
+10    2019-04-16 19:34:53   97.105.19.58      ...       python-requests/2.21.0      0.076213
+11    2019-04-16 19:34:53   97.105.19.58      ...       python-requests/2.21.0      0.076213
+12    2019-04-16 19:34:54   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13    2019-04-16 19:34:54   97.105.19.58      ...       python-requests/2.21.0      0.887577
+14    2019-04-16 19:34:56   97.105.19.58      ...       python-requests/2.21.0      0.887577
+15    2019-04-16 19:34:58   97.105.19.58      ...       python-requests/2.21.0      0.887577
+16    2019-04-16 19:35:01   97.105.19.58      ...       python-requests/2.21.0      0.887577
+17    2019-04-16 19:35:03   97.105.19.58      ...       python-requests/2.21.0      0.887577
+18    2019-04-16 19:35:05   97.105.19.58      ...       python-requests/2.21.0      0.887577
+19    2019-04-16 19:35:07   97.105.19.58      ...       python-requests/2.21.0      0.887577
+20    2019-04-16 19:35:09   97.105.19.58      ...       python-requests/2.21.0      0.887577
+21    2019-04-16 19:35:10   97.105.19.58      ...       python-requests/2.21.0      0.887577
+22    2019-04-16 19:35:12   97.105.19.58      ...       python-requests/2.21.0      0.887577
+23    2019-04-16 19:35:14   97.105.19.58      ...       python-requests/2.21.0      0.887577
+24    2019-04-16 19:35:16   97.105.19.58      ...       python-requests/2.21.0      0.887577
+25    2019-04-16 19:35:18   97.105.19.58      ...       python-requests/2.21.0      0.887577
+26    2019-04-16 19:35:20   97.105.19.58      ...       python-requests/2.21.0      0.887577
+27    2019-04-16 19:35:22   97.105.19.58      ...       python-requests/2.21.0      0.887577
+28    2019-04-16 19:35:24   97.105.19.58      ...       python-requests/2.21.0      0.887577
+29    2019-04-16 19:35:26   97.105.19.58      ...       python-requests/2.21.0      0.887577
+...                   ...            ...      ...                          ...           ...
+13948 2019-04-17 12:54:50   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13949 2019-04-17 12:54:51   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13950 2019-04-17 12:54:53   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13951 2019-04-17 12:54:54   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13952 2019-04-17 12:54:54   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13953 2019-04-17 12:54:55   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13954 2019-04-17 12:54:57   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13955 2019-04-17 12:54:58   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13956 2019-04-17 12:54:59   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13957 2019-04-17 12:54:59   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13958 2019-04-17 12:55:00   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13959 2019-04-17 12:55:01   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13960 2019-04-17 12:55:03   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13961 2019-04-17 12:55:03   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13962 2019-04-17 12:55:04   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13963 2019-04-17 12:55:06   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13964 2019-04-17 12:55:06   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13965 2019-04-17 12:55:08   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13966 2019-04-17 12:55:09   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13967 2019-04-17 12:55:09   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13968 2019-04-17 12:55:09   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13969 2019-04-17 12:55:12   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13970 2019-04-17 12:55:12   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13971 2019-04-17 12:55:13   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13972 2019-04-17 12:55:13   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13973 2019-04-17 12:55:14   97.105.19.58      ...       python-requests/2.21.0      0.887577
+13974 2019-04-21 10:02:41   95.31.18.119      ...       python-requests/2.21.0      0.000000
+13975 2019-04-17 19:36:41   95.31.16.121      ...       python-requests/2.21.0      0.000000
+13976 2019-04-18 19:42:41  97.105.15.120      ...       python-requests/2.21.0      0.000000
+13977 2019-04-19 19:42:41   97.105.19.58      ...       python-requests/2.21.0      0.000000
+
+[13978 rows x 8 columns]
+
+In [37]: df = df.reset_index().merge(request_df, on=['request_method'], how='left').fillna(value=0)
+
+In [38]: df.head()
+Out[38]: 
+            timestamp            ip      ...                request_agent  method_proba
+0 2019-04-16 19:34:42  97.105.19.58      ...       python-requests/2.21.0      0.887577
+1 2019-04-16 19:34:42  97.105.19.58      ...       python-requests/2.21.0      0.076213
+2 2019-04-16 19:34:44  97.105.19.58      ...       python-requests/2.21.0      0.887577
+3 2019-04-16 19:34:46  97.105.19.58      ...       python-requests/2.21.0      0.887577
+4 2019-04-16 19:34:48  97.105.19.58      ...       python-requests/2.21.0      0.887577
+
+[5 rows x 8 columns]
+
+In [39]: df[df[method_proba] < .0001]
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+<ipython-input-39-2761b474e783> in <module>()
+----> 1 df[df[method_proba] < .0001]
+
+NameError: name 'method_proba' is not defined
+
+In [40]: df[df['method_proba'] < .0001]
+Out[40]: 
+                timestamp     ...      method_proba
+173   2019-04-16 19:38:16     ...          0.000072
+1158  2019-04-16 19:49:58     ...          0.000072
+1435  2019-04-16 19:52:25     ...          0.000072
+2219  2019-04-16 19:59:46     ...          0.000072
+2348  2019-04-16 20:01:02     ...          0.000072
+6693  2019-04-16 20:57:38     ...          0.000072
+13974 2019-04-21 10:02:41     ...          0.000000
+13975 2019-04-17 19:36:41     ...          0.000000
+13976 2019-04-18 19:42:41     ...          0.000000
+13977 2019-04-19 19:42:41     ...          0.000000
+
+[10 rows x 8 columns]
+
+In [41]: ip_probs = train.groupby('ip').size().div(len(df))
+
+In [42]: ip_probs
+Out[42]: 
+ip
+173.173.113.51    0.075762
+24.26.242.9       0.001502
+3.88.129.158      0.000072
+3.92.201.136      0.000072
+34.207.64.242     0.000072
+34.229.70.250     0.000072
+35.174.209.2      0.000072
+35.175.171.137    0.000143
+45.23.250.16      0.000072
+52.87.230.102     0.000143
+52.90.165.200     0.000072
+52.91.30.150      0.000072
+54.145.52.184     0.000072
+54.172.14.223     0.000072
+68.201.219.223    0.001502
+70.121.214.34     0.000143
+72.181.105.81     0.017599
+72.181.113.170    0.043855
+97.105.19.58      0.858349
+dtype: float64
+
+In [43]: train.ip.count()
+Out[43]: 13974
+
+In [44]: train.ip.size()
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-44-698a238125d7> in <module>()
+----> 1 train.ip.size()
+
+TypeError: 'int' object is not callable
+
+In [45]: df.size()
+---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+<ipython-input-45-5098ab42f864> in <module>()
+----> 1 df.size()
+
+TypeError: 'numpy.int64' object is not callable
+
+In [46]: train.groupby('ip').size()
+Out[46]: 
+ip
+173.173.113.51     1059
+24.26.242.9          21
+3.88.129.158          1
+3.92.201.136          1
+34.207.64.242         1
+34.229.70.250         1
+35.174.209.2          1
+35.175.171.137        2
+45.23.250.16          1
+52.87.230.102         2
+52.90.165.200         1
+52.91.30.150          1
+54.145.52.184         1
+54.172.14.223         1
+68.201.219.223       21
+70.121.214.34         2
+72.181.105.81       246
+72.181.113.170      613
+97.105.19.58      11998
+dtype: int64
+
+In [47]: status_given_ip = pd.DataFrame(train.groupby(['ip','status']).size().div(len(train)).div(ip_probs, axi
+    ...: s=0, level='ip').reset_index().rename(index=str, columns(0:'proba_status_given_ip'))
+    ...: 
+    ...: 
+    ...: )
+  File "<ipython-input-47-22a650591773>", line 1
+    status_given_ip = pd.DataFrame(train.groupby(['ip','status']).size().div(len(train)).div(ip_probs, axis=0, level='ip').reset_index().rename(index=str, columns(0:'proba_status_given_ip'))
+                                                                                                                                                                    ^
+SyntaxError: invalid syntax
+
+
+In [48]: status_given_ip = pd.DataFrame(train.groupby(['ip','status']).size().div(len(train)).div(ip_probs, axi
+    ...: s=0, level='ip').reset_index())
+
+In [49]: status_given_ip.head()
+Out[49]: 
+               ip  status         0
+0  173.173.113.51     200  1.000286
+1     24.26.242.9     200  1.000286
+2    3.88.129.158     200  1.000286
+3    3.92.201.136     200  1.000286
+4   34.207.64.242     200  1.000286
+
+In [50]: train.groupby(['ip','status']).size().div(len(train))
+Out[50]: 
+ip              status
+173.173.113.51  200       0.075784
+24.26.242.9     200       0.001503
+3.88.129.158    200       0.000072
+3.92.201.136    200       0.000072
+34.207.64.242   200       0.000072
+34.229.70.250   200       0.000072
+35.174.209.2    200       0.000072
+35.175.171.137  200       0.000143
+45.23.250.16    200       0.000072
+52.87.230.102   200       0.000143
+52.90.165.200   200       0.000072
+52.91.30.150    200       0.000072
+54.145.52.184   200       0.000072
+54.172.14.223   200       0.000072
+68.201.219.223  200       0.001503
+70.121.214.34   200       0.000143
+72.181.105.81   200       0.017604
+72.181.113.170  200       0.043724
+                499       0.000143
+97.105.19.58    200       0.857593
+                499       0.001002
+dtype: float64
+
+In [51]: pd.DataFrame(train.groupby(['ip','status']).size().div(len(train)).div(ip_probs, axis=0, level='ip')
+    ...: 
+    ...: 
+    ...: 
+    ...: )
+Out[51]: 
+                              0
+ip             status          
+173.173.113.51 200     1.000286
+24.26.242.9    200     1.000286
+3.88.129.158   200     1.000286
+3.92.201.136   200     1.000286
+34.207.64.242  200     1.000286
+34.229.70.250  200     1.000286
+35.174.209.2   200     1.000286
+35.175.171.137 200     1.000286
+45.23.250.16   200     1.000286
+52.87.230.102  200     1.000286
+52.90.165.200  200     1.000286
+52.91.30.150   200     1.000286
+54.145.52.184  200     1.000286
+54.172.14.223  200     1.000286
+68.201.219.223 200     1.000286
+70.121.214.34  200     1.000286
+72.181.105.81  200     1.000286
+72.181.113.170 200     0.997023
+               499     0.003264
+97.105.19.58   200     0.999119
+               499     0.001167
+
+In [52]: pd.DataFrame(train.groupby(['ip','status']).size().div(len(train)).div(ip_probs, axis=0, level='ip').r
+    ...: eset_index())
+Out[52]: 
+                ip  status         0
+0   173.173.113.51     200  1.000286
+1      24.26.242.9     200  1.000286
+2     3.88.129.158     200  1.000286
+3     3.92.201.136     200  1.000286
+4    34.207.64.242     200  1.000286
+5    34.229.70.250     200  1.000286
+6     35.174.209.2     200  1.000286
+7   35.175.171.137     200  1.000286
+8     45.23.250.16     200  1.000286
+9    52.87.230.102     200  1.000286
+10   52.90.165.200     200  1.000286
+11    52.91.30.150     200  1.000286
+12   54.145.52.184     200  1.000286
+13   54.172.14.223     200  1.000286
+14  68.201.219.223     200  1.000286
+15   70.121.214.34     200  1.000286
+16   72.181.105.81     200  1.000286
+17  72.181.113.170     200  0.997023
+18  72.181.113.170     499  0.003264
+19    97.105.19.58     200  0.999119
+20    97.105.19.58     499  0.001167
+
+In [53]: pd.DataFrame(train.groupby(['ip','status']).size().div(len(train)).div(ip_probs, axis=0, level='ip').r
+    ...: eset_index().rename(columns={0: 'proba_status_given_ip'})
+    ...: )
+Out[53]: 
+                ip  status  proba_status_given_ip
+0   173.173.113.51     200               1.000286
+1      24.26.242.9     200               1.000286
+2     3.88.129.158     200               1.000286
+3     3.92.201.136     200               1.000286
+4    34.207.64.242     200               1.000286
+5    34.229.70.250     200               1.000286
+6     35.174.209.2     200               1.000286
+7   35.175.171.137     200               1.000286
+8     45.23.250.16     200               1.000286
+9    52.87.230.102     200               1.000286
+10   52.90.165.200     200               1.000286
+11    52.91.30.150     200               1.000286
+12   54.145.52.184     200               1.000286
+13   54.172.14.223     200               1.000286
+14  68.201.219.223     200               1.000286
+15   70.121.214.34     200               1.000286
+16   72.181.105.81     200               1.000286
+17  72.181.113.170     200               0.997023
+18  72.181.113.170     499               0.003264
+19    97.105.19.58     200               0.999119
+20    97.105.19.58     499               0.001167
+
+In [54]: 
+
+In [54]: status_df = pd.DataFrame(train.groupby(['ip','status']).size().div(len(train)).div(ip_probs, axis=0, l
+    ...: evel='ip').reset_index().rename(columns={0: 'proba_status_given_ip'})
+    ...: )
+
+In [55]: plt.plot(status_df.proba_status_given_ip)
+Out[55]: [<matplotlib.lines.Line2D at 0x1a2d662cc0>]
+
+In [56]: %matplotlib qt
+
+In [57]: plt.plot(status_df.proba_status_given_ip)
+Out[57]: [<matplotlib.lines.Line2D at 0x1a2d56f278>]
+
+In [58]: quit()
+Maggies-MacBook-Pro:Mod09_AnomalyDetection maggiegiust$ 

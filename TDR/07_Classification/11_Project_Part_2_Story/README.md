@@ -1,0 +1,3 @@
+# Storytelling Project
+
+This 'mini-project' is what they have been working up to throughout the whole storytelling module. By the time you launch the project they should be more or less done with it with the exception of the recording and maybe a bit of refining. Have them use canva to record themselves as they present their slides. The presentation should be no longer than 5 minutes. The project page does not have a lot of information but the rubric in Google Classroom will have the deliverables. Walk through the rubric with the class and then have them work on the project.
